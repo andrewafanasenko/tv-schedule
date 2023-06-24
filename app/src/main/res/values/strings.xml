@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">TV Schedule</string>
-    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_schedule">Schedule</string>
     <string name="bottom_navigation_bookmarks">Bookmarks</string>
 </resources>

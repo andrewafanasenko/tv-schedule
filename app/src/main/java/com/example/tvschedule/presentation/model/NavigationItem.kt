@@ -14,7 +14,7 @@ sealed class NavigationItem(
 ) {
     object Home : NavigationItem(
         route = Screen.Home.route,
-        titleRes = R.string.bottom_navigation_home,
+        titleRes = R.string.bottom_navigation_schedule,
         icon = Icons.Default.Home
     )
 

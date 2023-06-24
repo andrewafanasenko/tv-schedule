@@ -7,4 +7,3 @@ import androidx.navigation.NavHostController
 fun BookmarksNavigation(navController: NavHostController) {
     BookmarksScreen()
 }
-
