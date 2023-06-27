@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -29,24 +28,32 @@ class ScheduleViewModel @Inject constructor(
     private val scheduleData = MutableStateFlow(ScheduleData())
 
     init {
-        loadSchedule(LocalDate.now())
+        loadSchedule()
     }
 
     override val viewState: StateFlow<ScheduleUiState> = scheduleData.map { data ->
-        ScheduleUiState(data.isLoading, schedule = data.schedule.map { it.show.showName })
+        ScheduleUiState(
+            isLoading = data.isLoading,
+            isError = data.isError,
+            selectedDate = data.selectedDate,
+            schedule = data.schedule.map { it.show.showName }
+        )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ScheduleUiState())
 
     override fun handleEvent(event: ScheduleUiEvent) {
         when (event) {
-            is ScheduleUiEvent.SelectDate -> loadSchedule(event.date)
+            is ScheduleUiEvent.SelectDate -> {
+                scheduleData.update { it.copy(selectedDate = event.date) }
+                loadSchedule()
+            }
         }
     }
 
-    private fun loadSchedule(date: LocalDate) {
+    private fun loadSchedule() {
         loadScheduleJob?.cancel()
         scheduleData.update { it.copy(isLoading = true) }
         loadScheduleJob = viewModelScope.launch {
-            getScheduleUseCase.invoke(date)
+            getScheduleUseCase.invoke(scheduleData.value.selectedDate)
                 .onSuccess { result ->
                     scheduleData.update {
                         it.copy(
@@ -56,7 +63,7 @@ class ScheduleViewModel @Inject constructor(
                         )
                     }
                 }
-                .onFailure { throwable ->
+                .onFailure {
                     scheduleData.update { it.copy(isLoading = false, isError = true) }
                 }
         }
