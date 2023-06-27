@@ -12,18 +12,10 @@ interface ViewEvent
 
 abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState> : ViewModel() {
 
-    protected abstract val initialState: UiState
-
-    private val _viewState by lazy { MutableStateFlow(initialState) }
-    val viewState: StateFlow<UiState> get() = _viewState
+    abstract val viewState: StateFlow<UiState>
 
     fun setEvent(event: Event) {
         handleEvent(event)
-    }
-
-    protected fun setState(reducer: UiState.() -> UiState) {
-        val newState = viewState.value.reducer()
-        _viewState.value = newState
     }
 
     protected abstract fun handleEvent(event: Event)

@@ -19,11 +19,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private val json by lazy {
+        Json {
+            ignoreUnknownKeys = true
+        }
+    }
+
     @Provides
     @Singleton
     fun provideRetrofit(okHttp: OkHttpClient): Retrofit {
         return Retrofit.Builder().apply {
-            addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             client(okHttp)
             baseUrl(BuildConfig.API_BASE_URL)
         }.build()
