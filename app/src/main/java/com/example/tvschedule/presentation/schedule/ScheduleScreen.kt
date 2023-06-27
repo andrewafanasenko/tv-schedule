@@ -73,7 +73,6 @@ private fun WeekCalendar(
     selectedDate: LocalDate,
     onDayClick: (LocalDate) -> Unit
 ) {
-    //var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val calendarState = rememberJCalendarState(
         startMonth = YearMonth.now(),
         endMonth = YearMonth.now().plusMonths(1),
@@ -85,7 +84,6 @@ private fun WeekCalendar(
             .distinctUntilChanged()
             .collect {
                 onDayClick.invoke(it)
-                //   selectedDate = it
             }
     }
     Column {
