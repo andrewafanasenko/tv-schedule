@@ -8,6 +8,6 @@ data class Schedule(
     val seasonNumber: Int,
     val episodeNumber: Int,
     val runtime: Int,
-    val airDateTime: LocalDateTime,
+    val airDateTime: LocalDateTime?,
     val show: Show
 )

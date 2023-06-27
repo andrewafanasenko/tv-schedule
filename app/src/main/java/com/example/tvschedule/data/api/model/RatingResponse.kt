@@ -1,9 +1,10 @@
 package com.example.tvschedule.data.api.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class RatingResponse(
-    val average: Double?
+    @SerialName("average") val average: Double?
 )

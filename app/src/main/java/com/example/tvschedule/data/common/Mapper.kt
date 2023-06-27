@@ -1,6 +1,6 @@
 package com.example.tvschedule.data.common
 
-interface Mapper<I, O> {
+interface Mapper<in I, out O> {
 
     fun map(input: I): O
 
