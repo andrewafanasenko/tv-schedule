@@ -1,12 +1,13 @@
 package com.example.tvschedule.data.api.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class NetworkResponse(
-    val id: Long,
-    val name: String?,
-    val country: CountryResponse?,
-    val officialSite: String?
+    @SerialName("id") val id: Long,
+    @SerialName("name") val name: String?,
+    @SerialName("country") val country: CountryResponse?,
+    @SerialName("officialSite") val officialSite: String?
 )

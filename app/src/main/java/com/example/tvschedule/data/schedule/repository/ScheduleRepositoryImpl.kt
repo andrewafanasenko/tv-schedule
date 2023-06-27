@@ -1,8 +1,8 @@
 package com.example.tvschedule.data.schedule.repository
 
-import com.example.tvschedule.data.schedule.local.ScheduleLocalDataSource
+import com.example.tvschedule.data.schedule.source.local.ScheduleLocalDataSource
 import com.example.tvschedule.data.schedule.mapper.ScheduleMapper
-import com.example.tvschedule.data.schedule.remote.ScheduleRemoteDataSource
+import com.example.tvschedule.data.schedule.source.remote.ScheduleRemoteDataSource
 import com.example.tvschedule.domain.schedule.model.Schedule
 import com.example.tvschedule.domain.schedule.repository.ScheduleRepository
 import java.time.LocalDate

@@ -1,9 +1,9 @@
 package com.example.tvschedule.di
 
-import com.example.tvschedule.data.schedule.local.ScheduleLocalDataSource
-import com.example.tvschedule.data.schedule.local.ScheduleLocalDataSourceImpl
-import com.example.tvschedule.data.schedule.remote.ScheduleRemoteDataSource
-import com.example.tvschedule.data.schedule.remote.ScheduleRemoteDataSourceImpl
+import com.example.tvschedule.data.schedule.source.local.ScheduleLocalDataSource
+import com.example.tvschedule.data.schedule.source.local.ScheduleLocalDataSourceImpl
+import com.example.tvschedule.data.schedule.source.remote.ScheduleRemoteDataSource
+import com.example.tvschedule.data.schedule.source.remote.ScheduleRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

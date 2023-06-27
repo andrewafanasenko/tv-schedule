@@ -1,10 +1,11 @@
 package com.example.tvschedule.data.api.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class TimetableResponse(
-    val time: String?,
-    val days: List<String>?
+    @SerialName("time") val time: String?,
+    @SerialName("days") val days: List<String>?
 )
