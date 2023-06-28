@@ -46,6 +46,9 @@ class ScheduleViewModel @Inject constructor(
                 scheduleData.update { it.copy(selectedDate = event.date) }
                 loadSchedule()
             }
+            ScheduleUiEvent.Retry -> {
+                loadSchedule()
+            }
         }
     }
 
