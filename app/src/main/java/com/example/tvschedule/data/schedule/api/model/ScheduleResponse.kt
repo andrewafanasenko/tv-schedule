@@ -1,5 +1,6 @@
-package com.example.tvschedule.data.api.model
+package com.example.tvschedule.data.schedule.api.model
 
+import com.example.tvschedule.data.search.api.model.ShowResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

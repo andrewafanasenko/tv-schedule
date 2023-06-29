@@ -1,6 +1,6 @@
 package com.example.tvschedule.data.schedule.source.remote
 
-import com.example.tvschedule.data.api.model.ScheduleResponse
+import com.example.tvschedule.data.schedule.api.model.ScheduleResponse
 import java.time.LocalDate
 
 

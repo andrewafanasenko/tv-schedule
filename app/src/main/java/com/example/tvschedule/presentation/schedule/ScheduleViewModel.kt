@@ -40,7 +40,7 @@ class ScheduleViewModel @Inject constructor(
             schedule = data.schedule.map { schedule ->
                 ScheduleItem(
                     id = schedule.id,
-                    name = schedule.show.showName,
+                    name = schedule.show?.showName.orEmpty(),
                     episodeName = schedule.episodeName,
                     summary = schedule.summary,
                     coverUrl = schedule.coverUrl,

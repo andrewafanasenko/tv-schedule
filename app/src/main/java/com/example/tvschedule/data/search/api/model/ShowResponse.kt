@@ -1,5 +1,7 @@
-package com.example.tvschedule.data.api.model
+package com.example.tvschedule.data.search.api.model
 
+import com.example.tvschedule.data.schedule.api.model.ImageResponse
+import com.example.tvschedule.data.schedule.api.model.RatingResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +17,7 @@ data class ShowResponse(
     @SerialName("runtime") val runtime: Int?,
     @SerialName("averageRuntime") val averageRuntime: Int?,
     @SerialName("premiered") val premiered: String?,
-    @SerialName("officialSite") val officialSite: String? ,
+    @SerialName("officialSite") val officialSite: String?,
     @SerialName("schedule") val timetable: TimetableResponse?,
     @SerialName("rating") val rating: RatingResponse?,
     @SerialName("weight") val weight: Int?,
