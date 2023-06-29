@@ -14,10 +14,13 @@ class ScheduleMapper @Inject constructor() : Mapper<ScheduleResponse, Schedule> 
         return Schedule(
             id = input.id,
             episodeName = input.name.orEmpty(),
+            summary = input.summary.orEmpty(),
+            coverUrl = input.image?.medium ?: input.show?.image?.medium.orEmpty(),
             seasonNumber = input.season ?: 0,
             episodeNumber = input.number ?: 0,
-            runtime = input.runtime ?: 0,
+            runtime = input.runtime ?: input.show?.averageRuntime ?: 0,
             airDateTime = input.airstamp.toLocalDateTime(),
+            rating = input.rating?.average ?: input.show?.rating?.average,
             show = Show(
                 id = input.show?.id ?: -1,
                 showName = input.show?.name.orEmpty(),

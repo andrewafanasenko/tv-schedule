@@ -4,9 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,10 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.tvschedule.presentation.schedule.model.ScheduleItem
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiEvent
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiState
 import com.example.tvschedule.presentation.ui.components.EmptyState
 import com.example.tvschedule.presentation.ui.components.ErrorState
+import com.example.tvschedule.presentation.ui.components.ItemSchedule
 import com.example.tvschedule.presentation.ui.components.LoadingState
 import com.jcalendar.library.DayContent
 import com.jcalendar.library.DayOfWeekTitleContent
@@ -142,12 +146,16 @@ private fun WeekCalendar(
 }
 
 @Composable
-private fun Schedule(schedule: List<String>) {
+private fun Schedule(schedule: List<ScheduleItem>) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
-        items(schedule.count()) {
-            Text(text = schedule[it])
+        items(
+            items = schedule,
+            key = { it.id }
+        ) { item ->
+            ItemSchedule(item)
         }
     }
 }

@@ -5,4 +5,7 @@
     <string name="error_common">Something went wrong.\nPlease try again</string>
     <string name="nothing_found">Nothing found</string>
     <string name="retry_button_title">Retry</string>
+    <string name="duration_minutes">%d min</string>
+    <string name="rating_out_of_10">%s/10</string>
+    <string name="season_episode">S%1d, E%2d</string>
 </resources>
