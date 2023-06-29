@@ -4,9 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.tvschedule.presentation.schedule.model.ScheduleItem
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiEvent
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiState
-import com.example.tvschedule.presentation.ui.components.ProgressBar
+import com.example.tvschedule.presentation.ui.components.EmptyState
+import com.example.tvschedule.presentation.ui.components.ErrorState
+import com.example.tvschedule.presentation.ui.components.ItemSchedule
+import com.example.tvschedule.presentation.ui.components.LoadingState
 import com.jcalendar.library.DayContent
 import com.jcalendar.library.DayOfWeekTitleContent
 import com.jcalendar.library.JCalendar
@@ -54,16 +60,13 @@ private fun ScheduleContent(
     ) {
         WeekCalendar(
             selectedDate = state.selectedDate,
-            onDayClick = {
-                onEvent.invoke(ScheduleUiEvent.SelectDate(it))
-            }
+            onDayClick = { onEvent.invoke(ScheduleUiEvent.SelectDate(it)) }
         )
-        if (state.isLoading) {
-            ProgressBar()
-        } else if (state.isError) {
-            // TODO
-        } else {
-            Schedule(state.schedule)
+        when {
+            state.isLoading -> LoadingState()
+            state.isError -> ErrorState { onEvent.invoke(ScheduleUiEvent.Retry) }
+            state.schedule.isEmpty() -> EmptyState()
+            else -> Schedule(state.schedule)
         }
     }
 }
@@ -101,7 +104,7 @@ private fun WeekCalendar(
                     modifier = Modifier
                         .background(
                             color = if (day.isSelected) {
-                                MaterialTheme.colorScheme.secondary
+                                MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.surface
                             },
@@ -112,7 +115,7 @@ private fun WeekCalendar(
                                 Modifier.border(
                                     border = BorderStroke(
                                         width = 2.dp,
-                                        color = MaterialTheme.colorScheme.secondary
+                                        color = MaterialTheme.colorScheme.primary
                                     ),
                                     shape = MaterialTheme.shapes.medium
                                 )
@@ -121,7 +124,7 @@ private fun WeekCalendar(
                             }
                         ),
                     defaultTextColor = MaterialTheme.colorScheme.onSurface,
-                    selectedTextColor = MaterialTheme.colorScheme.onSecondary,
+                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                     textStyle = MaterialTheme.typography.titleMedium,
                     size = 48.dp,
                     onClick = {
@@ -137,18 +140,22 @@ private fun WeekCalendar(
                     textColor = MaterialTheme.colorScheme.onSurface,
                     textStyle = MaterialTheme.typography.labelMedium
                 )
-            },
+            }
         )
     }
 }
 
 @Composable
-private fun Schedule(schedule: List<String>) {
+private fun Schedule(schedule: List<ScheduleItem>) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
-        items(schedule.count()) {
-            Text(text = schedule[it])
+        items(
+            items = schedule,
+            key = { it.id }
+        ) { item ->
+            ItemSchedule(item)
         }
     }
 }

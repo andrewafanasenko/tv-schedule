@@ -8,5 +8,5 @@ data class ScheduleUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val selectedDate: LocalDate = LocalDate.now(),
-    val schedule: List<String> = emptyList()
+    val schedule: List<ScheduleItem> = emptyList()
 ) : ViewState

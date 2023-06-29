@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tvschedule.domain.schedule.use_case.GetScheduleUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.schedule.model.ScheduleData
+import com.example.tvschedule.presentation.schedule.model.ScheduleItem
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiEvent
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +37,20 @@ class ScheduleViewModel @Inject constructor(
             isLoading = data.isLoading,
             isError = data.isError,
             selectedDate = data.selectedDate,
-            schedule = data.schedule.map { it.show.showName }
+            schedule = data.schedule.map { schedule ->
+                ScheduleItem(
+                    id = schedule.id,
+                    name = schedule.show.showName,
+                    episodeName = schedule.episodeName,
+                    summary = schedule.summary,
+                    coverUrl = schedule.coverUrl,
+                    time = schedule.airDateTime?.toLocalTime()?.toString().orEmpty(),
+                    durationMin = schedule.runtime,
+                    rating = schedule.rating,
+                    season = schedule.seasonNumber,
+                    episode = schedule.episodeNumber
+                )
+            }
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ScheduleUiState())
 
@@ -44,6 +58,10 @@ class ScheduleViewModel @Inject constructor(
         when (event) {
             is ScheduleUiEvent.SelectDate -> {
                 scheduleData.update { it.copy(selectedDate = event.date) }
+                loadSchedule()
+            }
+
+            ScheduleUiEvent.Retry -> {
                 loadSchedule()
             }
         }
