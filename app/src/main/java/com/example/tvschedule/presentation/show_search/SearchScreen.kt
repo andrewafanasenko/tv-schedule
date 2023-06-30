@@ -1,12 +1,15 @@
 package com.example.tvschedule.presentation.show_search
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,10 +28,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -41,6 +46,8 @@ import com.example.tvschedule.presentation.show_search.model.SearchUiEvent
 import com.example.tvschedule.presentation.show_search.model.SearchUiState
 import com.example.tvschedule.presentation.show_search.model.ShowItem
 import com.example.tvschedule.presentation.ui.components.ErrorState
+import com.example.tvschedule.presentation.ui.components.ItemShow
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -58,11 +65,20 @@ private fun SearchContent(
     state: SearchUiState,
     onEvent: (SearchUiEvent) -> Unit
 ) {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             SearchShowBar(
                 query = state.searchQuery,
-                onQueryChange = { onEvent.invoke(SearchUiEvent.OnQueryChange(it)) }
+                onQueryChange = {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                    onEvent.invoke(SearchUiEvent.OnQueryChange(it))
+                }
             )
         }
     ) { paddingValues ->
@@ -70,7 +86,6 @@ private fun SearchContent(
             refreshing = state.isLoading,
             onRefresh = { onEvent.invoke(SearchUiEvent.Retry) }
         )
-        val keyboardController = LocalSoftwareKeyboardController.current
 
         Box(
             modifier = Modifier
@@ -81,7 +96,7 @@ private fun SearchContent(
                 keyboardController?.hide()
                 ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
             } else {
-                Shows(state.shows)
+                Shows(shows = state.shows, listState = listState)
             }
 
             PullRefreshIndicator(
@@ -138,17 +153,27 @@ private fun SearchShowBar(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun Shows(shows: List<ShowItem>) {
+private fun Shows(shows: List<ShowItem>, listState: LazyListState) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        state = listState,
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { keyboardController?.hide() }
+                )
+            },
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(
             items = shows,
             key = { it.id }
         ) { item ->
-            Text(item.name)
+            ItemShow(show = item, onFavouriteClick = {})
         }
     }
 }

@@ -6,5 +6,6 @@ data class Show(
     val summary: String,
     val coverUrl: String,
     val rating: Double?,
-    val averageRuntime: Int
+    val averageRuntime: Int,
+    val genres: List<String>
 )

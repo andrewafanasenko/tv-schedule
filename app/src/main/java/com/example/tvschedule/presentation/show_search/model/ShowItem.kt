@@ -6,4 +6,6 @@ data class ShowItem(
     val summary: String,
     val coverUrl: String,
     val rating: Double?,
+    val genres: List<String>,
+    val isFavourite: Boolean,
 )

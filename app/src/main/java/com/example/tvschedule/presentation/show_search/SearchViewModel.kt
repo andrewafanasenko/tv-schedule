@@ -40,7 +40,9 @@ class SearchViewModel @Inject constructor(
                     name = show.showName,
                     summary = show.summary,
                     coverUrl = show.coverUrl,
-                    rating = show.rating
+                    rating = show.rating,
+                    genres = show.genres,
+                    isFavourite = show.id % 2L == 0L // TODO
                 )
             }
         )
