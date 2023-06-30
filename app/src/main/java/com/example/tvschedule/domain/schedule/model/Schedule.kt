@@ -1,5 +1,6 @@
 package com.example.tvschedule.domain.schedule.model
 
+import com.example.tvschedule.domain.search.model.Show
 import java.time.LocalDateTime
 
 data class Schedule(
@@ -12,5 +13,5 @@ data class Schedule(
     val runtime: Int,
     val airDateTime: LocalDateTime?,
     val rating: Double?,
-    val show: Show
+    val show: Show?
 )

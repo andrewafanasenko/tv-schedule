@@ -24,7 +24,11 @@ fun MainContent(navController: NavHostController = rememberNavController()) {
     Scaffold(
         bottomBar = {
             NavigationBar {
-                val items = listOf(NavigationItem.Home, NavigationItem.Bookmarks)
+                val items = listOf(
+                    NavigationItem.Home,
+                    NavigationItem.Search,
+                    NavigationItem.Bookmarks
+                )
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { item ->

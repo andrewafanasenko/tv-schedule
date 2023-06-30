@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TV Schedule</string>
     <string name="bottom_navigation_schedule">Schedule</string>
+    <string name="bottom_navigation_search">Search</string>
     <string name="bottom_navigation_bookmarks">Bookmarks</string>
     <string name="error_common">Something went wrong.\nPlease try again</string>
     <string name="nothing_found">Nothing found</string>
@@ -8,4 +9,5 @@
     <string name="duration_minutes">%d min</string>
     <string name="rating_out_of_10">%s/10</string>
     <string name="season_episode">S%1d, E%2d</string>
+    <string name="search_hint">Search for shows</string>
 </resources>

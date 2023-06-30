@@ -1,4 +1,4 @@
-package com.example.tvschedule.data.api.model
+package com.example.tvschedule.data.schedule.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
