@@ -52,6 +52,9 @@ class SearchViewModel @Inject constructor(
                 searchData.update { it.copy(searchQuery = event.query) }
                 searchShow()
             }
+            SearchUiEvent.Retry -> {
+                searchShow()
+            }
         }
     }
 

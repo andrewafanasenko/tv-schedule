@@ -1,5 +1,6 @@
 package com.example.tvschedule.presentation.show_search
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,9 +10,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -20,6 +25,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +40,7 @@ import com.example.tvschedule.R
 import com.example.tvschedule.presentation.show_search.model.SearchUiEvent
 import com.example.tvschedule.presentation.show_search.model.SearchUiState
 import com.example.tvschedule.presentation.show_search.model.ShowItem
+import com.example.tvschedule.presentation.ui.components.ErrorState
 
 
 @Composable
@@ -45,6 +52,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun SearchContent(
     state: SearchUiState,
@@ -58,7 +66,30 @@ private fun SearchContent(
             )
         }
     ) { paddingValues ->
-        Shows(paddingValues = paddingValues, shows = state.shows)
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = state.isLoading,
+            onRefresh = { onEvent.invoke(SearchUiEvent.Retry) }
+        )
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .pullRefresh(pullRefreshState)
+        ) {
+            if (state.isError) {
+                keyboardController?.hide()
+                ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
+            } else {
+                Shows(state.shows)
+            }
+
+            PullRefreshIndicator(
+                refreshing = state.isLoading,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
     }
 }
 
@@ -71,6 +102,7 @@ private fun SearchShowBar(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+
     TextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +122,6 @@ private fun SearchShowBar(
         },
         singleLine = true,
         shape = RoundedCornerShape(28.dp),
-
         colors = TextFieldDefaults.colors(
             disabledTextColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
@@ -108,11 +139,9 @@ private fun SearchShowBar(
 }
 
 @Composable
-private fun Shows(paddingValues: PaddingValues, shows: List<ShowItem>) {
+private fun Shows(shows: List<ShowItem>) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(
