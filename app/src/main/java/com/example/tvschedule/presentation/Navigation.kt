@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.tvschedule.presentation.bookmarks.BookmarksNavigation
 import com.example.tvschedule.presentation.schedule.ScheduleNavigation
 import com.example.tvschedule.presentation.model.Screen
-import com.example.tvschedule.presentation.show_search.SearchNavigation
+import com.example.tvschedule.presentation.search.SearchNavigation
 
 @Composable
 fun MainNavHost(navController: NavHostController, innerPadding: PaddingValues) {
