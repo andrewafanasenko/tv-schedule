@@ -47,6 +47,7 @@ import com.example.tvschedule.presentation.show_search.model.SearchUiState
 import com.example.tvschedule.presentation.show_search.model.ShowItem
 import com.example.tvschedule.presentation.ui.components.ErrorState
 import com.example.tvschedule.presentation.ui.components.ItemShow
+import com.example.tvschedule.presentation.ui.components.SearchEmptyState
 import kotlinx.coroutines.launch
 
 
@@ -89,14 +90,21 @@ private fun SearchContent(
 
         Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .pullRefresh(pullRefreshState)
         ) {
-            if (state.isError) {
-                keyboardController?.hide()
-                ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
-            } else {
-                Shows(shows = state.shows, listState = listState)
+            when {
+                state.isError -> {
+                    keyboardController?.hide()
+                    ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
+                }
+                state.shows.isNotEmpty() -> {
+                    Shows(shows = state.shows, listState = listState)
+                }
+                state.isLoading.not() -> {
+                    SearchEmptyState(state.searchQuery.isNotEmpty())
+                }
             }
 
             PullRefreshIndicator(
