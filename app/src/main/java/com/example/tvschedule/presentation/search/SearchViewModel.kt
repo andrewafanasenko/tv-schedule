@@ -1,12 +1,12 @@
-package com.example.tvschedule.presentation.show_search
+package com.example.tvschedule.presentation.search
 
 import androidx.lifecycle.viewModelScope
 import com.example.tvschedule.domain.search.use_case.SearchShowUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
-import com.example.tvschedule.presentation.show_search.model.SearchData
-import com.example.tvschedule.presentation.show_search.model.SearchUiEvent
-import com.example.tvschedule.presentation.show_search.model.SearchUiState
-import com.example.tvschedule.presentation.show_search.model.ShowItem
+import com.example.tvschedule.presentation.search.model.SearchData
+import com.example.tvschedule.presentation.search.model.SearchUiEvent
+import com.example.tvschedule.presentation.search.model.SearchUiState
+import com.example.tvschedule.presentation.search.model.ShowItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

@@ -1,8 +1,9 @@
-package com.example.tvschedule.presentation.show_search
+package com.example.tvschedule.presentation.search
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,11 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvschedule.R
-import com.example.tvschedule.presentation.show_search.model.SearchUiEvent
-import com.example.tvschedule.presentation.show_search.model.SearchUiState
-import com.example.tvschedule.presentation.show_search.model.ShowItem
+import com.example.tvschedule.presentation.search.model.SearchUiEvent
+import com.example.tvschedule.presentation.search.model.SearchUiState
+import com.example.tvschedule.presentation.search.model.ShowItem
 import com.example.tvschedule.presentation.ui.components.ErrorState
 import com.example.tvschedule.presentation.ui.components.ItemShow
+import com.example.tvschedule.presentation.ui.components.SearchEmptyState
 import kotlinx.coroutines.launch
 
 
@@ -80,7 +82,8 @@ private fun SearchContent(
                     onEvent.invoke(SearchUiEvent.OnQueryChange(it))
                 }
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         val pullRefreshState = rememberPullRefreshState(
             refreshing = state.isLoading,
@@ -89,14 +92,21 @@ private fun SearchContent(
 
         Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .pullRefresh(pullRefreshState)
         ) {
-            if (state.isError) {
-                keyboardController?.hide()
-                ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
-            } else {
-                Shows(shows = state.shows, listState = listState)
+            when {
+                state.isError -> {
+                    keyboardController?.hide()
+                    ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
+                }
+                state.shows.isNotEmpty() -> {
+                    Shows(shows = state.shows, listState = listState)
+                }
+                state.isLoading.not() -> {
+                    SearchEmptyState(state.searchQuery.isNotEmpty())
+                }
             }
 
             PullRefreshIndicator(

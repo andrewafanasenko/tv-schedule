@@ -1,4 +1,4 @@
-package com.example.tvschedule.presentation.show_search.model
+package com.example.tvschedule.presentation.search.model
 
 data class ShowItem(
     val id: Long,
