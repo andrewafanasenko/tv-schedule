@@ -1,9 +1,9 @@
-package com.example.tvschedule.presentation.bookmarks
+package com.example.tvschedule.presentation.favorite
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun BookmarksScreen() {
+fun FavoriteScreen() {
     Text(text = "Bookmarks")
 }

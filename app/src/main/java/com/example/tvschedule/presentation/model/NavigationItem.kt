@@ -2,9 +2,9 @@ package com.example.tvschedule.presentation.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.tvschedule.R
 
@@ -25,9 +25,9 @@ sealed class NavigationItem(
         icon = Icons.Default.Search
     )
 
-    object Bookmarks : NavigationItem(
-        route = Screen.Bookmarks.route,
-        titleRes = R.string.bottom_navigation_bookmarks,
-        icon = Icons.Default.Star
+    object Favorite : NavigationItem(
+        route = Screen.Favorite.route,
+        titleRes = R.string.bottom_navigation_favorite,
+        icon = Icons.Default.Favorite
     )
 }
