@@ -22,4 +22,8 @@ class SearchRepositoryImpl @Inject constructor(
         return mapper.mapList(shows)
     }
 
+    override suspend fun getShowFromCache(showId: Long): Show? {
+        return localDataSource.shows[showId]?.let { mapper.map(it) }
+    }
+
 }

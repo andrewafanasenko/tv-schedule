@@ -19,4 +19,7 @@ interface FavoriteShowsDao {
 
     @Query("SELECT * FROM show")
     fun showsUpdates(): Flow<List<ShowEntity>>
+
+    @Query("SELECT * FROM show WHERE id is :showId")
+    suspend fun getShow(showId: Long): ShowEntity?
 }

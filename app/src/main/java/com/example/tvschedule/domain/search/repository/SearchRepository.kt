@@ -5,4 +5,6 @@ import com.example.tvschedule.domain.search.model.Show
 interface SearchRepository {
 
     suspend fun searchShow(query: String): List<Show>
+
+    suspend fun getShowFromCache(showId: Long): Show?
 }
