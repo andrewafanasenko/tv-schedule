@@ -35,10 +35,6 @@ class SearchViewModel @Inject constructor(
 
     private val searchData = MutableStateFlow(SearchData())
 
-    init {
-        listenToFavoriteShow()
-    }
-
     override val viewState: StateFlow<SearchUiState> = searchData.map { data ->
         SearchUiState(
             isLoading = data.isLoading,
@@ -58,7 +54,11 @@ class SearchViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, SearchUiState())
 
-    private fun listenToFavoriteShow() {
+    init {
+        getFavoriteShows()
+    }
+
+    private fun getFavoriteShows() {
         viewModelScope.launch {
             getFavoritesUseCase.invoke()
                 .onSuccess { favoritesFlow ->
