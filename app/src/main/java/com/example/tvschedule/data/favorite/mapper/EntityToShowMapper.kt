@@ -13,8 +13,8 @@ class EntityToShowMapper @Inject constructor(): Mapper<ShowEntity, Show> {
         showName = input.name,
         summary = input.summary,
         coverUrl = input.coverUrl,
-        rating = null,
-        averageRuntime = 0,
+        rating = input.rating,
+        averageRuntime = input.averageRuntime,
         genres = emptyList()
     )
 }

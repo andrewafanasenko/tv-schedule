@@ -2,6 +2,7 @@ package com.example.tvschedule.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.tvschedule.data.db.MIGRATION_1_2
 import com.example.tvschedule.data.db.ShowsDatabase
 import com.example.tvschedule.data.favorite.source.local.db.FavoriteShowsDao
 import dagger.Module
@@ -23,7 +24,10 @@ object DatabaseModule {
             context.applicationContext,
             ShowsDatabase::class.java,
             "Shows.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_1_2)
+            .build()
     }
 
     @Provides

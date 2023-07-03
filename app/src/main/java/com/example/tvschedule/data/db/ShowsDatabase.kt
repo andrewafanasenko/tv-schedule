@@ -7,7 +7,7 @@ import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
 
 @Database(
     entities = [ShowEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class ShowsDatabase : RoomDatabase() {
