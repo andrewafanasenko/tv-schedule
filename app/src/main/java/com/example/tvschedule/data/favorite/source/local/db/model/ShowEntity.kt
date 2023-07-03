@@ -13,4 +13,5 @@ data class ShowEntity(
     @ColumnInfo(name = "coverUrl") val coverUrl: String,
     @ColumnInfo(name = "rating") val rating: Double?,
     @ColumnInfo(name = "averageRuntime") val averageRuntime: Int,
+    @ColumnInfo(name = "genres") val genres: List<String>
 )
