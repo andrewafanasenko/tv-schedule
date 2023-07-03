@@ -101,9 +101,17 @@ private fun SearchContent(
                     keyboardController?.hide()
                     ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
                 }
+
                 state.shows.isNotEmpty() -> {
-                    Shows(shows = state.shows, listState = listState)
+                    Shows(
+                        shows = state.shows,
+                        listState = listState,
+                        onFavouriteClick = { showId: Long, isFavorite: Boolean ->
+                            onEvent.invoke(SearchUiEvent.OnFavoriteClick(showId, isFavorite))
+                        }
+                    )
                 }
+
                 state.isLoading.not() -> {
                     SearchEmptyState(state.searchQuery.isNotEmpty())
                 }
@@ -165,7 +173,11 @@ private fun SearchShowBar(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun Shows(shows: List<ShowItem>, listState: LazyListState) {
+private fun Shows(
+    shows: List<ShowItem>,
+    listState: LazyListState,
+    onFavouriteClick: (id: Long, isFavorite: Boolean) -> Unit
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LazyColumn(
@@ -183,7 +195,7 @@ private fun Shows(shows: List<ShowItem>, listState: LazyListState) {
             items = shows,
             key = { it.id }
         ) { item ->
-            ItemShow(show = item, onFavouriteClick = {})
+            ItemShow(show = item, onFavouriteClick = onFavouriteClick)
         }
     }
 }

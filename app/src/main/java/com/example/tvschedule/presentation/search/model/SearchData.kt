@@ -7,5 +7,6 @@ data class SearchData(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val searchQuery: String = "",
-    val shows: List<Show> = emptyList()
+    val shows: List<Show> = emptyList(),
+    val favoriteShowsIds: List<Long> = emptyList()
 )

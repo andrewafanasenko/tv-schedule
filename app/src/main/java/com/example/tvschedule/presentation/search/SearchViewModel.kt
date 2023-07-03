@@ -1,6 +1,9 @@
 package com.example.tvschedule.presentation.search
 
 import androidx.lifecycle.viewModelScope
+import com.example.tvschedule.domain.favorite.use_case.AddToFavoritesUseCase
+import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
+import com.example.tvschedule.domain.favorite.use_case.RemoveFromFavoritesUseCase
 import com.example.tvschedule.domain.search.use_case.SearchShowUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.search.model.SearchData
@@ -22,12 +25,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchShowUseCase: SearchShowUseCase
+    private val searchShowUseCase: SearchShowUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val addToFavoritesUseCase: AddToFavoritesUseCase,
+    private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase
 ) : BaseViewModel<SearchUiEvent, SearchUiState>() {
 
     private var searchShowJob: Job? = null
 
     private val searchData = MutableStateFlow(SearchData())
+
+    init {
+        listenToFavoriteShow()
+    }
 
     override val viewState: StateFlow<SearchUiState> = searchData.map { data ->
         SearchUiState(
@@ -42,11 +52,27 @@ class SearchViewModel @Inject constructor(
                     coverUrl = show.coverUrl,
                     rating = show.rating,
                     genres = show.genres,
-                    isFavourite = show.id % 2L == 0L // TODO
+                    isFavourite = data.favoriteShowsIds.any { show.id == it }
                 )
             }
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, SearchUiState())
+
+    private fun listenToFavoriteShow() {
+        viewModelScope.launch {
+            getFavoritesUseCase.invoke()
+                .onSuccess { favoritesFlow ->
+                    favoritesFlow.collect { shows ->
+                        searchData.update {
+                            it.copy(favoriteShowsIds = shows.map { show -> show.id })
+                        }
+                    }
+                }
+                .onFailure {
+                    searchData.update { it.copy(isLoading = false, isError = true) }
+                }
+        }
+    }
 
     override fun handleEvent(event: SearchUiEvent) {
         when (event) {
@@ -54,8 +80,17 @@ class SearchViewModel @Inject constructor(
                 searchData.update { it.copy(searchQuery = event.query) }
                 searchShow()
             }
+
             SearchUiEvent.Retry -> {
                 searchShow()
+            }
+
+            is SearchUiEvent.OnFavoriteClick -> {
+                if (event.isFavorite) {
+                    addToFavorite(event.showId)
+                } else {
+                    removeFromFavorite(event.showId)
+                }
             }
         }
     }
@@ -78,6 +113,20 @@ class SearchViewModel @Inject constructor(
                 .onFailure {
                     searchData.update { it.copy(isLoading = false, isError = true) }
                 }
+        }
+    }
+
+    private fun addToFavorite(showId: Long) {
+        viewModelScope.launch {
+            searchData.value.shows.firstOrNull { it.id == showId }?.let {
+                addToFavoritesUseCase.invoke(it)
+            }
+        }
+    }
+
+    private fun removeFromFavorite(showId: Long) {
+        viewModelScope.launch {
+            removeFromFavoritesUseCase.invoke(showId)
         }
     }
 
