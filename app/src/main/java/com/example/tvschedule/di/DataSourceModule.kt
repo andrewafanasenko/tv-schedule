@@ -1,5 +1,7 @@
 package com.example.tvschedule.di
 
+import com.example.tvschedule.data.favorite.source.local.FavoriteLocalDataSource
+import com.example.tvschedule.data.favorite.source.local.FavoriteLocalDataSourceImpl
 import com.example.tvschedule.data.schedule.source.local.ScheduleLocalDataSource
 import com.example.tvschedule.data.schedule.source.local.ScheduleLocalDataSourceImpl
 import com.example.tvschedule.data.schedule.source.remote.ScheduleRemoteDataSource
@@ -42,5 +44,11 @@ abstract class DataSourceModule {
     abstract fun provideSearchLocalDataSource(
         searchLocalDataSource: SearchLocalDataSourceImpl
     ): SearchLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun provideFavoriteLocalDataSource(
+        searchLocalDataSource: FavoriteLocalDataSourceImpl
+    ): FavoriteLocalDataSource
 
 }

@@ -1,4 +1,4 @@
-package com.example.tvschedule.presentation.search
+package com.example.tvschedule.presentation.favorite
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,29 +20,29 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.tvschedule.presentation.search.model.SearchUiEvent
-import com.example.tvschedule.presentation.search.model.SearchUiState
+import com.example.tvschedule.presentation.favorite.model.FavoriteUiEvent
+import com.example.tvschedule.presentation.favorite.model.FavoriteUiState
+import com.example.tvschedule.presentation.ui.components.EmptyState
 import com.example.tvschedule.presentation.ui.components.ErrorState
 import com.example.tvschedule.presentation.ui.components.SearchEmptyState
 import com.example.tvschedule.presentation.ui.components.SearchShowBar
 import com.example.tvschedule.presentation.ui.components.ShowsList
 import kotlinx.coroutines.launch
 
-
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
+fun FavoriteScreen(viewModel: FavoriteViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    SearchContent(
+    FavoriteContent(
         state = state,
         onEvent = { viewModel.setEvent(it) }
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
-private fun SearchContent(
-    state: SearchUiState,
-    onEvent: (SearchUiEvent) -> Unit
+private fun FavoriteContent(
+    state: FavoriteUiState,
+    onEvent: (FavoriteUiEvent) -> Unit
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -56,7 +56,7 @@ private fun SearchContent(
                     coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
-                    onEvent.invoke(SearchUiEvent.OnQueryChange(it))
+                    onEvent.invoke(FavoriteUiEvent.OnQueryChange(it))
                 }
             )
         },
@@ -64,7 +64,7 @@ private fun SearchContent(
     ) { paddingValues ->
         val pullRefreshState = rememberPullRefreshState(
             refreshing = state.isLoading,
-            onRefresh = { onEvent.invoke(SearchUiEvent.Retry) }
+            onRefresh = { onEvent.invoke(FavoriteUiEvent.Retry) }
         )
 
         Box(
@@ -76,21 +76,25 @@ private fun SearchContent(
             when {
                 state.isError -> {
                     keyboardController?.hide()
-                    ErrorState { onEvent.invoke(SearchUiEvent.Retry) }
+                    ErrorState { onEvent.invoke(FavoriteUiEvent.Retry) }
                 }
 
                 state.shows.isNotEmpty() -> {
                     ShowsList(
                         shows = state.shows,
                         listState = listState,
-                        onFavouriteClick = { showId: Long, isFavorite: Boolean ->
-                            onEvent.invoke(SearchUiEvent.OnFavoriteClick(showId, isFavorite))
+                        onFavouriteClick = { showId: Long, _ ->
+                            onEvent.invoke(FavoriteUiEvent.OnFavoriteClick(showId))
                         }
                     )
                 }
 
                 state.isLoading.not() -> {
-                    SearchEmptyState(state.searchQuery.isNotEmpty())
+                    if (state.searchQuery.isEmpty()) {
+                        EmptyState()
+                    } else {
+                        SearchEmptyState(state.searchQuery.isNotEmpty())
+                    }
                 }
             }
 

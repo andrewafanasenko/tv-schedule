@@ -38,7 +38,7 @@ import com.example.tvschedule.presentation.search.model.ShowItem
 fun ItemShow(
     show: ShowItem,
     modifier: Modifier = Modifier,
-    onFavouriteClick: (Boolean) -> Unit
+    onFavouriteClick: (id: Long, isFavorite: Boolean) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -58,7 +58,9 @@ fun ItemShow(
         FavouriteButton(
             isFavourite = show.isFavourite,
             modifier = Modifier.align(Alignment.TopEnd),
-            onFavouriteClick = onFavouriteClick
+            onFavouriteClick = {
+                onFavouriteClick.invoke(show.id, it)
+            }
         )
         show.rating?.let {
             RatingPill(

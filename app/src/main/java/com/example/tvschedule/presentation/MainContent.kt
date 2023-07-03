@@ -27,7 +27,7 @@ fun MainContent(navController: NavHostController = rememberNavController()) {
                 val items = listOf(
                     NavigationItem.Home,
                     NavigationItem.Search,
-                    NavigationItem.Bookmarks
+                    NavigationItem.Favorite
                 )
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
