@@ -18,5 +18,5 @@ interface FavoriteShowsDao {
     suspend fun deleteShow(showId: Long): Int
 
     @Query("SELECT * FROM show")
-    fun showsUpdates(): Flow<ShowEntity>
+    fun showsUpdates(): Flow<List<ShowEntity>>
 }
