@@ -24,13 +24,13 @@ class GetShowDetailsUseCase @Inject constructor(
     ): Result<Show> = withContext(ioDispatcher) {
         runCatching {
             scheduleRepository.getShowFromCache(showId)?.let {
-                return@let it
+                return@runCatching it
             }
             searchRepository.getShowFromCache(showId)?.let {
-                return@let it
+                return@runCatching it
             }
             favoriteRepository.getFavoriteShow(showId)?.let {
-                return@let it
+                return@runCatching it
             }
             showDetailsRepository.getShowDetails(showId)
         }

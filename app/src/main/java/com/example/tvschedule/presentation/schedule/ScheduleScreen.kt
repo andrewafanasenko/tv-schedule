@@ -3,6 +3,7 @@ package com.example.tvschedule.presentation.schedule
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvschedule.presentation.schedule.model.ScheduleItem
+import com.example.tvschedule.presentation.schedule.model.ScheduleNavCallback
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiEvent
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiState
 import com.example.tvschedule.presentation.ui.components.EmptyState
@@ -40,18 +42,23 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScheduleScreen(viewModel: ScheduleViewModel = hiltViewModel()) {
+fun ScheduleScreen(
+    viewModel: ScheduleViewModel = hiltViewModel(),
+    navigation: (ScheduleNavCallback) -> Unit
+) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     ScheduleContent(
         state = state,
-        onEvent = { viewModel.setEvent(it) }
+        onEvent = { viewModel.setEvent(it) },
+        onShowClick = { navigation.invoke(ScheduleNavCallback.ShowDetails(it)) }
     )
 }
 
 @Composable
 private fun ScheduleContent(
     state: ScheduleUiState,
-    onEvent: (ScheduleUiEvent) -> Unit
+    onEvent: (ScheduleUiEvent) -> Unit,
+    onShowClick: (showId: Long) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -66,7 +73,7 @@ private fun ScheduleContent(
             state.isLoading -> LoadingState()
             state.isError -> ErrorState { onEvent.invoke(ScheduleUiEvent.Retry) }
             state.schedule.isEmpty() -> EmptyState()
-            else -> Schedule(state.schedule)
+            else -> Schedule(schedule = state.schedule, onShowClick = onShowClick)
         }
     }
 }
@@ -146,7 +153,7 @@ private fun WeekCalendar(
 }
 
 @Composable
-private fun Schedule(schedule: List<ScheduleItem>) {
+private fun Schedule(schedule: List<ScheduleItem>, onShowClick: (showId: Long) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp)
@@ -155,7 +162,12 @@ private fun Schedule(schedule: List<ScheduleItem>) {
             items = schedule,
             key = { it.id }
         ) { item ->
-            ItemSchedule(item)
+            ItemSchedule(
+                schedule = item,
+                modifier = Modifier.clickable {
+                    onShowClick.invoke(item.showId)
+                }
+            )
         }
     }
 }

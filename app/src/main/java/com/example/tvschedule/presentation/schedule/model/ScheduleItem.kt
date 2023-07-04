@@ -2,6 +2,7 @@ package com.example.tvschedule.presentation.schedule.model
 
 data class ScheduleItem(
     val id: Long,
+    val showId: Long,
     val name: String,
     val episodeName: String,
     val summary: String,
