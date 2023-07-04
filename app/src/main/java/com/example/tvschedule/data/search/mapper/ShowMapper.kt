@@ -14,6 +14,7 @@ class ShowMapper @Inject constructor() : Mapper<ShowResponse, Show> {
             showName = input.name.orEmpty(),
             summary = input.summary.orEmpty(),
             coverUrl = input.image?.medium.orEmpty(),
+            originalCoverUrl = input.image?.original.orEmpty(),
             rating = input.rating?.average,
             averageRuntime = input.averageRuntime ?: 0,
             genres = input.genres.orEmpty()

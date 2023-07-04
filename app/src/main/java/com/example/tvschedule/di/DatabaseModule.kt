@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.tvschedule.data.db.MIGRATION_1_2
 import com.example.tvschedule.data.db.MIGRATION_2_3
+import com.example.tvschedule.data.db.MIGRATION_3_4
 import com.example.tvschedule.data.db.ShowsDatabase
 import com.example.tvschedule.data.favorite.source.local.db.FavoriteShowsDao
 import dagger.Module
@@ -27,7 +28,7 @@ object DatabaseModule {
             "Shows.db"
         )
             .fallbackToDestructiveMigration()
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
     }
 
