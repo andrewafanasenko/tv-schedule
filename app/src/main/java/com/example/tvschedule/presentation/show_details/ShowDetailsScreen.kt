@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TopAppBar
@@ -31,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsNavCallback
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
+import com.example.tvschedule.presentation.ui.components.ImageCard
 import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
 
 
@@ -63,7 +66,7 @@ private fun ShowDetailsContent(
 }
 
 @Composable
-private fun ShowDetailsList(state: ShowDetailsUiState,) {
+private fun ShowDetailsList(state: ShowDetailsUiState) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { Cover(state.coverUrl) }
     }
@@ -71,33 +74,43 @@ private fun ShowDetailsList(state: ShowDetailsUiState,) {
 
 @Composable
 private fun Cover(coverUrl: String) {
-    if (coverUrl.isNotBlank()) {
+    Box(contentAlignment = Alignment.TopCenter) {
         val backgroundColor = MaterialTheme.colorScheme.background
-        Box(contentAlignment = Alignment.TopCenter) {
-            ImageWithPlaceholder(
-                imageUrl = coverUrl,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(436.dp)
-                    .blur(300.dp)
-                    .drawWithCache {
-                        onDrawWithContent {
-                            drawContent()
-                            drawRect(
-                                Brush.verticalGradient(
-                                    0f to Color.Transparent,
-                                    0.2f to backgroundColor,
-                                    1F to backgroundColor
-                                )
+        ImageWithPlaceholder(
+            imageUrl = coverUrl,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(436.dp)
+                .blur(300.dp)
+                .drawWithCache {
+                    onDrawWithContent {
+                        drawContent()
+                        drawRect(
+                            Brush.verticalGradient(
+                                0f to Color.Transparent,
+                                0.2f to backgroundColor,
+                                1F to backgroundColor
                             )
-                        }
-                    },
-                contentScale = ContentScale.Crop
+                        )
+                    }
+                },
+            contentScale = ContentScale.Crop
+        )
+        if (coverUrl.isBlank()) {
+            ImageCard(
+                coverUrl = coverUrl,
+                modifier = Modifier
+                    .height(360.dp)
+                    .width(200.dp)
+                    .padding(top = 56.dp),
+                elevation = 4.dp
             )
+        } else {
             ImageWithPlaceholder(
                 imageUrl = coverUrl,
                 modifier = Modifier
                     .height(380.dp)
+                    .widthIn(min = 160.dp)
                     .padding(top = 56.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.Fit
