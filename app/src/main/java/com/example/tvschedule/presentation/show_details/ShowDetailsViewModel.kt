@@ -2,6 +2,8 @@ package com.example.tvschedule.presentation.show_details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
+import com.example.tvschedule.domain.show_details.use_case.GetAndUpdateFavoriteShowUseCase
 import com.example.tvschedule.domain.show_details.use_case.GetShowDetailsUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.model.Screen
@@ -22,7 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ShowDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getShowDetailsUseCase: GetShowDetailsUseCase
+    private val getShowDetailsUseCase: GetShowDetailsUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val getAndUpdateFavoriteShowUseCase: GetAndUpdateFavoriteShowUseCase
 ) : BaseViewModel<ShowDetailsUiEvent, ShowDetailsUiState>() {
 
     private val showId = checkNotNull(savedStateHandle[Screen.SHOW_ID]) as Long
@@ -33,11 +37,13 @@ class ShowDetailsViewModel @Inject constructor(
         ShowDetailsUiState(
             isLoading = data.isLoading,
             isError = data.isError,
-            coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty()
+            coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
+            isFavorite = data.isFavorite
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())
 
     init {
+        listenToFavoriteShows()
         loadShowDetails()
     }
 
@@ -45,13 +51,36 @@ class ShowDetailsViewModel @Inject constructor(
 
     }
 
+    private fun listenToFavoriteShows() {
+        viewModelScope.launch {
+            getFavoritesUseCase.invoke()
+                .onSuccess { favoritesFlow ->
+                    favoritesFlow.collect { shows ->
+                        shows.firstOrNull { it.id == showId }?.let { show ->
+                            showDetailsData.update {
+                                it.copy(show = show, isFavorite = true)
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
     private fun loadShowDetails() {
         viewModelScope.launch {
             showDetailsData.update { it.copy(isLoading = true) }
             getShowDetailsUseCase.invoke(showId)
-                .onSuccess { show ->
+                .onSuccess { showDetails ->
                     showDetailsData.update {
-                        it.copy(isLoading = false, isError = false, show = show)
+                        it.copy(
+                            isLoading = false,
+                            isError = false,
+                            show = showDetails.show,
+                            isFavorite = showDetails.isFavorite
+                        )
+                    }
+                    if (showDetails.isFavorite) {
+                        getAndUpdateFavoriteShowUseCase.invoke(showId)
                     }
                 }
                 .onFailure {

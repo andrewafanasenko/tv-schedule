@@ -3,8 +3,8 @@ package com.example.tvschedule.domain.show_details.use_case
 import com.example.tvschedule.di.IoDispatcher
 import com.example.tvschedule.domain.favorite.repository.FavoriteRepository
 import com.example.tvschedule.domain.schedule.repository.ScheduleRepository
-import com.example.tvschedule.domain.search.model.Show
 import com.example.tvschedule.domain.search.repository.SearchRepository
+import com.example.tvschedule.domain.show_details.model.ShowDetails
 import com.example.tvschedule.domain.show_details.repository.ShowDetailsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -21,18 +21,18 @@ class GetShowDetailsUseCase @Inject constructor(
 
     suspend operator fun invoke(
         showId: Long
-    ): Result<Show> = withContext(ioDispatcher) {
+    ): Result<ShowDetails> = withContext(ioDispatcher) {
         runCatching {
+            favoriteRepository.getFavoriteShow(showId)?.let {
+                return@runCatching ShowDetails(it, isFavorite = true)
+            }
             scheduleRepository.getShowFromCache(showId)?.let {
-                return@runCatching it
+                return@runCatching ShowDetails(it, isFavorite = false)
             }
             searchRepository.getShowFromCache(showId)?.let {
-                return@runCatching it
+                return@runCatching ShowDetails(it, isFavorite = false)
             }
-            favoriteRepository.getFavoriteShow(showId)?.let {
-                return@runCatching it
-            }
-            showDetailsRepository.getShowDetails(showId)
+            ShowDetails(showDetailsRepository.getShowDetails(showId), isFavorite = false)
         }
     }
 }

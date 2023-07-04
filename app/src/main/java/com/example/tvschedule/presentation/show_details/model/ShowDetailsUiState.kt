@@ -6,5 +6,6 @@ import com.example.tvschedule.presentation.common.ViewState
 data class ShowDetailsUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val coverUrl: String = ""
+    val coverUrl: String = "",
+    val isFavorite: Boolean = false
 ):ViewState

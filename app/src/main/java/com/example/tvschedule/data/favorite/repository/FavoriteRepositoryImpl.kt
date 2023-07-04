@@ -29,6 +29,10 @@ class FavoriteRepositoryImpl @Inject constructor(
         localDataSource.removeFromFavorite(showId)
     }
 
+    override suspend fun updateFavorite(show: Show) {
+        localDataSource.updateFavorite(showToEntityMapper.map(show))
+    }
+
     override suspend fun getFavoriteShow(showId: Long): Show? =
         localDataSource.getShow(showId)?.let { entityToShowMapper.map(it) }
 }

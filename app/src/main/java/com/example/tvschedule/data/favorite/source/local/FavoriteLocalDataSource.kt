@@ -12,6 +12,8 @@ interface FavoriteLocalDataSource {
 
     suspend fun removeFromFavorite(showId: Long)
 
+    suspend fun updateFavorite(show: ShowEntity)
+
     suspend fun getShow(showId: Long): ShowEntity?
 
 }

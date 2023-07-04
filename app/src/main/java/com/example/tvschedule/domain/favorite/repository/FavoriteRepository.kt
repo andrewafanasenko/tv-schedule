@@ -12,5 +12,7 @@ interface FavoriteRepository {
 
     suspend fun removeFromFavorite(showId: Long)
 
+    suspend fun updateFavorite(show: Show)
+
     suspend fun getFavoriteShow(showId: Long): Show?
 }

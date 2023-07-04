@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,9 @@ interface FavoriteShowsDao {
 
     @Query("DELETE FROM show WHERE show.id is :showId")
     suspend fun deleteShow(showId: Long): Int
+
+    @Update
+    suspend fun updateShow(show: ShowEntity)
 
     @Query("SELECT * FROM show")
     fun showsUpdates(): Flow<List<ShowEntity>>
