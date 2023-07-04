@@ -1,6 +1,7 @@
 package com.example.tvschedule.presentation.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +22,8 @@ import com.example.tvschedule.presentation.search.model.ShowItem
 fun ShowsList(
     shows: List<ShowItem>,
     listState: LazyListState,
-    onFavouriteClick: (id: Long, isFavorite: Boolean) -> Unit
+    onFavouriteClick: (id: Long, isFavorite: Boolean) -> Unit,
+    onItemClick: (showId: Long) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -43,7 +45,9 @@ fun ShowsList(
             ItemShow(
                 show = item,
                 onFavouriteClick = onFavouriteClick,
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .clickable { onItemClick.invoke(item.id) }
             )
         }
     }

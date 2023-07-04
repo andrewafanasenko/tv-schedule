@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.tvschedule.presentation.search.model.SearchNavCallback
 import com.example.tvschedule.presentation.search.model.SearchUiEvent
 import com.example.tvschedule.presentation.search.model.SearchUiState
 import com.example.tvschedule.presentation.ui.components.ErrorState
@@ -30,11 +31,15 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
+fun SearchScreen(
+    viewModel: SearchViewModel = hiltViewModel(),
+    navigation: (SearchNavCallback) -> Unit
+) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     SearchContent(
         state = state,
-        onEvent = { viewModel.setEvent(it) }
+        onEvent = { viewModel.setEvent(it) },
+        onShowClick = { navigation.invoke(SearchNavCallback.ShowDetails(it)) }
     )
 }
 
@@ -42,7 +47,8 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 @Composable
 private fun SearchContent(
     state: SearchUiState,
-    onEvent: (SearchUiEvent) -> Unit
+    onEvent: (SearchUiEvent) -> Unit,
+    onShowClick: (showId: Long) -> Unit
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -85,6 +91,10 @@ private fun SearchContent(
                         listState = listState,
                         onFavouriteClick = { showId: Long, isFavorite: Boolean ->
                             onEvent.invoke(SearchUiEvent.OnFavoriteClick(showId, isFavorite))
+                        },
+                        onItemClick = {
+                            keyboardController?.hide()
+                            onShowClick.invoke(it)
                         }
                     )
                 }
