@@ -1,5 +1,6 @@
 package com.example.tvschedule.presentation.show_details
 
+import android.text.Html
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsNavCallback
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
+import com.example.tvschedule.presentation.ui.components.ExpandableText
 import com.example.tvschedule.presentation.ui.components.ImageCard
 import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
 
@@ -72,7 +74,8 @@ private fun ShowDetailsContent(
 private fun ShowDetailsList(state: ShowDetailsUiState) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { Cover(state.coverUrl) }
-        item { ShowName(state.showName) }
+        item { Name(state.showName) }
+        item { Summary(state.summary) }
     }
 }
 
@@ -124,15 +127,25 @@ private fun Cover(coverUrl: String) {
 }
 
 @Composable
-fun ShowName(name: String) {
+private fun Name(name: String) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp),
         text = name,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+private fun Summary(summary: String) {
+    ExpandableText(
+        text = Html.fromHtml(summary, Html.FROM_HTML_MODE_LEGACY).toString(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
     )
 }
 

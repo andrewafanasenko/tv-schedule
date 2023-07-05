@@ -12,4 +12,6 @@
     <string name="search_hint">Search</string>
     <string name="search_description">Search for series and TV shows</string>
     <string name="no_results_description">No results matching query were found</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
 </resources>

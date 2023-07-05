@@ -39,6 +39,7 @@ class ShowDetailsViewModel @Inject constructor(
             isError = data.isError,
             coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
             showName = data.show?.showName.orEmpty(),
+            summary = data.show?.summary.orEmpty(),
             isFavorite = data.isFavorite
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())
