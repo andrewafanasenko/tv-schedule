@@ -3,7 +3,6 @@ package com.example.tvschedule.presentation.show_details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
-import com.example.tvschedule.domain.show_details.use_case.GetAndUpdateFavoriteShowUseCase
 import com.example.tvschedule.domain.show_details.use_case.GetShowDetailsUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.model.Screen
@@ -14,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -26,7 +26,6 @@ class ShowDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getShowDetailsUseCase: GetShowDetailsUseCase,
     private val getFavoritesUseCase: GetFavoritesUseCase,
-    private val getAndUpdateFavoriteShowUseCase: GetAndUpdateFavoriteShowUseCase
 ) : BaseViewModel<ShowDetailsUiEvent, ShowDetailsUiState>() {
 
     private val showId = checkNotNull(savedStateHandle[Screen.SHOW_ID]) as Long
@@ -72,7 +71,10 @@ class ShowDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             showDetailsData.update { it.copy(isLoading = true) }
             getShowDetailsUseCase.invoke(showId)
-                .onSuccess { showDetails ->
+                .catch {
+                    showDetailsData.update { it.copy(isLoading = false, isError = true) }
+                }
+                .collect { showDetails ->
                     showDetailsData.update {
                         it.copy(
                             isLoading = false,
@@ -81,12 +83,6 @@ class ShowDetailsViewModel @Inject constructor(
                             isFavorite = showDetails.isFavorite
                         )
                     }
-                    if (showDetails.isFavorite) {
-                        getAndUpdateFavoriteShowUseCase.invoke(showId)
-                    }
-                }
-                .onFailure {
-                    showDetailsData.update { it.copy(isLoading = false, isError = true) }
                 }
         }
     }

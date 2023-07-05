@@ -1,6 +1,6 @@
 package com.example.tvschedule.data.search.source.local
 
-import com.example.tvschedule.data.search.api.model.ShowResponse
+import com.example.tvschedule.data.show_details.api.model.ShowResponse
 
 
 interface SearchLocalDataSource {

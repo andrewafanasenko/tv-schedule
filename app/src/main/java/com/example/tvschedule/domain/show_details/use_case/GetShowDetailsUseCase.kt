@@ -7,7 +7,9 @@ import com.example.tvschedule.domain.search.repository.SearchRepository
 import com.example.tvschedule.domain.show_details.model.ShowDetails
 import com.example.tvschedule.domain.show_details.repository.ShowDetailsRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
@@ -21,18 +23,22 @@ class GetShowDetailsUseCase @Inject constructor(
 
     suspend operator fun invoke(
         showId: Long
-    ): Result<ShowDetails> = withContext(ioDispatcher) {
-        runCatching {
-            favoriteRepository.getFavoriteShow(showId)?.let {
-                return@runCatching ShowDetails(it, isFavorite = true)
-            }
-            scheduleRepository.getShowFromCache(showId)?.let {
-                return@runCatching ShowDetails(it, isFavorite = false)
-            }
-            searchRepository.getShowFromCache(showId)?.let {
-                return@runCatching ShowDetails(it, isFavorite = false)
-            }
-            ShowDetails(showDetailsRepository.getShowDetails(showId), isFavorite = false)
+    ): Flow<ShowDetails> = flow {
+        var isFavorite = false
+        favoriteRepository.getFavoriteShow(showId)?.let {
+            isFavorite = true
+            emit(ShowDetails(it, isFavorite = true))
         }
-    }
+        scheduleRepository.getShowFromCache(showId)?.let {
+            emit(ShowDetails(it, isFavorite = false))
+        }
+        searchRepository.getShowFromCache(showId)?.let {
+            emit(ShowDetails(it, isFavorite = false))
+        }
+        val showFromRemote = showDetailsRepository.getShowDetails(showId)
+        emit(ShowDetails(showFromRemote, isFavorite = isFavorite))
+        if (isFavorite) {
+            favoriteRepository.updateFavorite(showFromRemote)
+        }
+    }.flowOn(ioDispatcher)
 }

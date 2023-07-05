@@ -1,7 +1,7 @@
 package com.example.tvschedule.data.search.mapper
 
 import com.example.tvschedule.data.common.Mapper
-import com.example.tvschedule.data.search.api.model.ShowResponse
+import com.example.tvschedule.data.show_details.api.model.ShowResponse
 import com.example.tvschedule.domain.search.model.Show
 import javax.inject.Inject
 
