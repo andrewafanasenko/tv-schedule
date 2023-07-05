@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,6 +28,8 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -69,6 +72,7 @@ private fun ShowDetailsContent(
 private fun ShowDetailsList(state: ShowDetailsUiState) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { Cover(state.coverUrl) }
+        item { ShowName(state.showName) }
     }
 }
 
@@ -80,7 +84,7 @@ private fun Cover(coverUrl: String) {
             imageUrl = coverUrl,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(436.dp)
+                .height(420.dp)
                 .blur(300.dp)
                 .drawWithCache {
                     onDrawWithContent {
@@ -117,6 +121,19 @@ private fun Cover(coverUrl: String) {
             )
         }
     }
+}
+
+@Composable
+fun ShowName(name: String) {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        text = name,
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable

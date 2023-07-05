@@ -7,5 +7,6 @@ data class ShowDetailsUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val coverUrl: String = "",
+    val showName: String = "",
     val isFavorite: Boolean = false
 ):ViewState
