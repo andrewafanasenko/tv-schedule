@@ -11,5 +11,7 @@ data class ShowDetailsUiState(
     val summary: String = "",
     val isFavorite: Boolean = false,
     val cast: List<CastItem> = emptyList(),
-    val isViewAllCastButtonVisible: Boolean = false
-):ViewState
+    val isViewAllCastButtonVisible: Boolean = false,
+    val seasons: List<SeasonItem> = emptyList(),
+    val isViewAllSeasonsButtonVisible: Boolean = false,
+) : ViewState

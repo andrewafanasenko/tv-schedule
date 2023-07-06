@@ -7,10 +7,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SeasonResponse(
-    @SerialName("id") val id: Long?,
+    @SerialName("id") val id: Long,
     @SerialName("url") val url: String?,
     @SerialName("number") val number: Int?,
     @SerialName("name") val name: String?,
+    @SerialName("summary") val summary: String?,
     @SerialName("episodeOrder") val episodeOrder: Int?,
     @SerialName("premiereDate") val premiereDate: String?,
     @SerialName("endDate") val endDate: String?,

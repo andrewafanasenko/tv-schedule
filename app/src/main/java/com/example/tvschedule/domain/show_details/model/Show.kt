@@ -10,5 +10,6 @@ data class Show(
     val rating: Double?,
     val averageRuntime: Int,
     val genres: List<String>,
-    val cast: List<Cast>
+    val cast: List<Cast>,
+    val seasons: List<Season>
 )

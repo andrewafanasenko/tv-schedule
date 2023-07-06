@@ -1,5 +1,6 @@
 package com.example.tvschedule.presentation.ui.components
 
+import android.text.Html
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,17 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.tvschedule.R
-import com.example.tvschedule.presentation.show_details.model.CastItem
+import com.example.tvschedule.presentation.show_details.model.SeasonItem
 
 
 @Composable
-fun ItemCast(cast: CastItem, modifier: Modifier = Modifier) {
+fun ItemSeason(season: SeasonItem, modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
+            .height(180.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .then(modifier),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -37,7 +39,7 @@ fun ItemCast(cast: CastItem, modifier: Modifier = Modifier) {
     ) {
         Row(modifier.fillMaxSize()) {
             ImageCard(
-                coverUrl = cast.imageUrl,
+                coverUrl = season.imageUrl,
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(120.dp),
@@ -51,22 +53,30 @@ fun ItemCast(cast: CastItem, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = cast.fullName,
+                    text = season.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                if (cast.characterName.isNotBlank()) {
+                if (season.dateRange.isNotBlank()) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = season.dateRange,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray
+                    )
+                }
+                if (season.episodesCount > 0) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.as_prefix),
+                            text = stringResource(id = R.string.episodes),
                             style = MaterialTheme.typography.titleSmall,
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = cast.characterName,
+                            text = season.episodesCount.toString(),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -74,9 +84,10 @@ fun ItemCast(cast: CastItem, modifier: Modifier = Modifier) {
                 }
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = cast.lifeDateRange,
+                    text = Html.fromHtml(season.summary, Html.FROM_HTML_MODE_LEGACY).toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

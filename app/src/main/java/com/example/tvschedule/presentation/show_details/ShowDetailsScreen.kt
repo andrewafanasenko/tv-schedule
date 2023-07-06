@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvschedule.R
+import com.example.tvschedule.presentation.show_details.model.CastItem
+import com.example.tvschedule.presentation.show_details.model.SeasonItem
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsNavCallback
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
@@ -49,6 +51,7 @@ import com.example.tvschedule.presentation.ui.components.ExpandableText
 import com.example.tvschedule.presentation.ui.components.ImageCard
 import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
 import com.example.tvschedule.presentation.ui.components.ItemCast
+import com.example.tvschedule.presentation.ui.components.ItemSeason
 
 
 @Composable
@@ -89,7 +92,8 @@ private fun ShowDetailsList(state: ShowDetailsUiState) {
         item { Cover(state.coverUrl) }
         stickyHeader { Name(state.showName) }
         item { Summary(state.summary) }
-        cast(state)
+        cast(state.cast, state.isViewAllCastButtonVisible)
+        seasons(state.seasons, state.isViewAllSeasonsButtonVisible)
     }
 }
 
@@ -164,23 +168,13 @@ private fun Summary(summary: String) {
     )
 }
 
-private fun LazyListScope.cast(state: ShowDetailsUiState) {
-    if (state.cast.isNotEmpty()) {
-        item {
-            Text(
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp,
-                    bottom = 8.dp
-                ),
-                text = stringResource(id = R.string.cast_title),
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
+private fun LazyListScope.cast(cast: List<CastItem>, isViewAllVisible: Boolean) {
+    if (cast.isEmpty()) return
+    item {
+        SectionHeader(stringResource(id = R.string.cast_title))
     }
-    items(state.cast) { ItemCast(it) }
-    if (state.isViewAllCastButtonVisible) {
+    items(cast) { ItemCast(it) }
+    if (isViewAllVisible) {
         item {
             ButtonViewAll {
                 // TODO
@@ -188,6 +182,36 @@ private fun LazyListScope.cast(state: ShowDetailsUiState) {
         }
     }
 }
+
+private fun LazyListScope.seasons(seasons: List<SeasonItem>, isViewAllVisible: Boolean) {
+    if (seasons.isEmpty()) return
+    item {
+        SectionHeader(stringResource(id = R.string.seasons_title))
+    }
+    items(seasons) { ItemSeason(it) }
+    if (isViewAllVisible) {
+        item {
+            ButtonViewAll {
+                // TODO
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionHeader(name: String) {
+    Text(
+        modifier = Modifier.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+            bottom = 8.dp
+        ),
+        text = name,
+        style = MaterialTheme.typography.titleMedium
+    )
+}
+
 
 @Composable
 private fun TopBar(onNavigationIconClick: () -> Unit) {

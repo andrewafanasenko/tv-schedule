@@ -6,8 +6,10 @@ import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
 import com.example.tvschedule.domain.show_details.use_case.GetShowDetailsUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.common.getPersonLifeRange
+import com.example.tvschedule.presentation.common.getSeasonDateRange
 import com.example.tvschedule.presentation.model.Screen
 import com.example.tvschedule.presentation.show_details.model.CastItem
+import com.example.tvschedule.presentation.show_details.model.SeasonItem
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsData
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
@@ -54,7 +56,18 @@ class ShowDetailsViewModel @Inject constructor(
                     imageUrl = person.imageUrl
                 )
             },
-            isViewAllCastButtonVisible = data.cast.size > MAX_ITEMS_COUNT
+            isViewAllCastButtonVisible = data.cast.size > MAX_ITEMS_COUNT,
+            seasons = data.seasons.take(MAX_ITEMS_COUNT).map { season ->
+                SeasonItem(
+                    id = season.id,
+                    name = season.name.ifBlank { season.number.toString() },
+                    summary = season.summary,
+                    episodesCount = season.episodeOrder,
+                    dateRange = season.premiereDate.getSeasonDateRange(season.endDate),
+                    imageUrl = season.imageUrl
+                )
+            },
+            isViewAllSeasonsButtonVisible = data.seasons.size > MAX_ITEMS_COUNT
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())
 
@@ -96,7 +109,8 @@ class ShowDetailsViewModel @Inject constructor(
                             isError = false,
                             show = showDetails.show,
                             isFavorite = showDetails.isFavorite,
-                            cast = showDetails.show.cast
+                            cast = showDetails.show.cast,
+                            seasons = showDetails.show.seasons
                         )
                     }
                 }
