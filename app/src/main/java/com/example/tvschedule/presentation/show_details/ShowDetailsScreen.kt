@@ -2,7 +2,10 @@ package com.example.tvschedule.presentation.show_details
 
 import android.text.Html
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -29,17 +34,21 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.tvschedule.R
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsNavCallback
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
+import com.example.tvschedule.presentation.ui.components.ButtonViewAll
 import com.example.tvschedule.presentation.ui.components.ExpandableText
 import com.example.tvschedule.presentation.ui.components.ImageCard
 import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
+import com.example.tvschedule.presentation.ui.components.ItemCast
 
 
 @Composable
@@ -70,12 +79,17 @@ private fun ShowDetailsContent(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ShowDetailsList(state: ShowDetailsUiState) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
         item { Cover(state.coverUrl) }
-        item { Name(state.showName) }
+        stickyHeader { Name(state.showName) }
         item { Summary(state.summary) }
+        cast(state)
     }
 }
 
@@ -130,8 +144,9 @@ private fun Cover(coverUrl: String) {
 private fun Name(name: String) {
     Text(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp),
+            .padding(horizontal = 56.dp, vertical = 14.dp),
         text = name,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold,
@@ -147,6 +162,31 @@ private fun Summary(summary: String) {
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 8.dp)
     )
+}
+
+private fun LazyListScope.cast(state: ShowDetailsUiState) {
+    if (state.cast.isNotEmpty()) {
+        item {
+            Text(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 16.dp,
+                    bottom = 8.dp
+                ),
+                text = stringResource(id = R.string.cast_title),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
+    items(state.cast) { ItemCast(it) }
+    if (state.isViewAllCastButtonVisible) {
+        item {
+            ButtonViewAll {
+                // TODO
+            }
+        }
+    }
 }
 
 @Composable

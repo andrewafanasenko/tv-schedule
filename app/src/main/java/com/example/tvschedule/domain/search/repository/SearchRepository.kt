@@ -1,6 +1,6 @@
 package com.example.tvschedule.domain.search.repository
 
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 
 interface SearchRepository {
 

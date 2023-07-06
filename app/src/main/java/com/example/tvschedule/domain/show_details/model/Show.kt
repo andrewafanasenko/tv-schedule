@@ -1,4 +1,5 @@
-package com.example.tvschedule.domain.search.model
+package com.example.tvschedule.domain.show_details.model
+
 
 data class Show(
     val id: Long,
@@ -8,5 +9,6 @@ data class Show(
     val originalCoverUrl: String,
     val rating: Double?,
     val averageRuntime: Int,
-    val genres: List<String>
+    val genres: List<String>,
+    val cast: List<Cast>
 )

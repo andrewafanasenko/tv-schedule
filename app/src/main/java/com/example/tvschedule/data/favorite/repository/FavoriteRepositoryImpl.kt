@@ -4,7 +4,7 @@ import com.example.tvschedule.data.favorite.mapper.EntityToShowMapper
 import com.example.tvschedule.data.favorite.mapper.ShowToEntityMapper
 import com.example.tvschedule.data.favorite.source.local.FavoriteLocalDataSource
 import com.example.tvschedule.domain.favorite.repository.FavoriteRepository
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

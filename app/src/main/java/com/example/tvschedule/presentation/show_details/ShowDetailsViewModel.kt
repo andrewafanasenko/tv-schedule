@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
 import com.example.tvschedule.domain.show_details.use_case.GetShowDetailsUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
+import com.example.tvschedule.presentation.common.getPersonLifeRange
 import com.example.tvschedule.presentation.model.Screen
+import com.example.tvschedule.presentation.show_details.model.CastItem
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsData
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
@@ -39,7 +41,20 @@ class ShowDetailsViewModel @Inject constructor(
             coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
             showName = data.show?.showName.orEmpty(),
             summary = data.show?.summary.orEmpty(),
-            isFavorite = data.isFavorite
+            isFavorite = data.isFavorite,
+            cast = data.cast.take(MAX_ITEMS_COUNT).map { person ->
+                CastItem(
+                    id = person.id,
+                    fullName = person.fullName,
+                    characterName = if (person.self.not()) person.characterName else "",
+                    lifeDateRange = person.birthday.getPersonLifeRange(
+                        birthPlace = person.birthPlace,
+                        deathday = person.deathday
+                    ),
+                    imageUrl = person.imageUrl
+                )
+            },
+            isViewAllCastButtonVisible = data.cast.size > MAX_ITEMS_COUNT
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())
 
@@ -80,10 +95,16 @@ class ShowDetailsViewModel @Inject constructor(
                             isLoading = false,
                             isError = false,
                             show = showDetails.show,
-                            isFavorite = showDetails.isFavorite
+                            isFavorite = showDetails.isFavorite,
+                            cast = showDetails.show.cast
                         )
                     }
                 }
         }
+    }
+
+    companion object {
+
+        private const val MAX_ITEMS_COUNT = 4
     }
 }

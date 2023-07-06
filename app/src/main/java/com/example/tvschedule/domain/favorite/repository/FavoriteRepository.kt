@@ -1,6 +1,6 @@
 package com.example.tvschedule.domain.favorite.repository
 
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import kotlinx.coroutines.flow.Flow
 
 

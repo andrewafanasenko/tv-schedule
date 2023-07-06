@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PersonResponse(
-    @SerialName("id") val id: Long?,
+    @SerialName("id") val id: Long,
     @SerialName("url") val url: String?,
     @SerialName("name") val name: String?,
     @SerialName("country") val country: CountryResponse?,

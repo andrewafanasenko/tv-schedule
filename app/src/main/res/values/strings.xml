@@ -14,4 +14,7 @@
     <string name="no_results_description">No results matching query were found</string>
     <string name="show_more">Show more</string>
     <string name="show_less">Show less</string>
+    <string name="view_all">View all</string>
+    <string name="as_prefix">as</string>
+    <string name="cast_title">Cast</string>
 </resources>

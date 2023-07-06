@@ -6,7 +6,7 @@ import com.example.tvschedule.data.schedule.source.remote.ScheduleRemoteDataSour
 import com.example.tvschedule.data.search.mapper.ShowMapper
 import com.example.tvschedule.domain.schedule.model.Schedule
 import com.example.tvschedule.domain.schedule.repository.ScheduleRepository
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import java.time.LocalDate
 import javax.inject.Inject
 

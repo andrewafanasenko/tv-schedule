@@ -9,5 +9,7 @@ data class ShowDetailsUiState(
     val coverUrl: String = "",
     val showName: String = "",
     val summary: String = "",
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val cast: List<CastItem> = emptyList(),
+    val isViewAllCastButtonVisible: Boolean = false
 ):ViewState

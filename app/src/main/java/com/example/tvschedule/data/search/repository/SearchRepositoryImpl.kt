@@ -3,7 +3,7 @@ package com.example.tvschedule.data.search.repository
 import com.example.tvschedule.data.search.mapper.ShowMapper
 import com.example.tvschedule.data.search.source.local.SearchLocalDataSource
 import com.example.tvschedule.data.search.source.remote.SearchRemoteDataSource
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import com.example.tvschedule.domain.search.repository.SearchRepository
 import javax.inject.Inject
 
