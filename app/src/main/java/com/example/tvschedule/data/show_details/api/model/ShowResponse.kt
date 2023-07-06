@@ -1,4 +1,4 @@
-package com.example.tvschedule.data.search.api.model
+package com.example.tvschedule.data.show_details.api.model
 
 import com.example.tvschedule.data.schedule.api.model.ImageResponse
 import com.example.tvschedule.data.schedule.api.model.RatingResponse
@@ -28,4 +28,5 @@ data class ShowResponse(
     @SerialName("image") val image: ImageResponse?,
     @SerialName("summary") val summary: String?,
     @SerialName("updated") val updated: Long?,
+    @SerialName("_embedded") val embedded: EmbeddedResponse? = null,
 )

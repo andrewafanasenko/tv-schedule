@@ -1,6 +1,6 @@
 package com.example.tvschedule.presentation.search.model
 
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 
 
 data class SearchData(

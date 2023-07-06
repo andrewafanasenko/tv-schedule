@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.tvschedule.presentation.favorite.model.FavoriteNavCallback
 import com.example.tvschedule.presentation.favorite.model.FavoriteUiEvent
 import com.example.tvschedule.presentation.favorite.model.FavoriteUiState
 import com.example.tvschedule.presentation.ui.components.EmptyState
@@ -30,11 +31,15 @@ import com.example.tvschedule.presentation.ui.components.ShowsList
 import kotlinx.coroutines.launch
 
 @Composable
-fun FavoriteScreen(viewModel: FavoriteViewModel = hiltViewModel()) {
+fun FavoriteScreen(
+    viewModel: FavoriteViewModel = hiltViewModel(),
+    navigation: (FavoriteNavCallback) -> Unit
+) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     FavoriteContent(
         state = state,
-        onEvent = { viewModel.setEvent(it) }
+        onEvent = { viewModel.setEvent(it) },
+        onShowClick = { navigation.invoke(FavoriteNavCallback.ShowDetails(it)) }
     )
 }
 
@@ -42,7 +47,8 @@ fun FavoriteScreen(viewModel: FavoriteViewModel = hiltViewModel()) {
 @Composable
 private fun FavoriteContent(
     state: FavoriteUiState,
-    onEvent: (FavoriteUiEvent) -> Unit
+    onEvent: (FavoriteUiEvent) -> Unit,
+    onShowClick: (showId: Long) -> Unit
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -85,6 +91,10 @@ private fun FavoriteContent(
                         listState = listState,
                         onFavouriteClick = { showId: Long, _ ->
                             onEvent.invoke(FavoriteUiEvent.OnFavoriteClick(showId))
+                        },
+                        onItemClick = {
+                            keyboardController?.hide()
+                            onShowClick.invoke(it)
                         }
                     )
                 }

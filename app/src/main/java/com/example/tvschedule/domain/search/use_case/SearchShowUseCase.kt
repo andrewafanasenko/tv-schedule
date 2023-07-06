@@ -1,7 +1,7 @@
 package com.example.tvschedule.domain.search.use_case
 
 import com.example.tvschedule.di.IoDispatcher
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import com.example.tvschedule.domain.search.repository.SearchRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

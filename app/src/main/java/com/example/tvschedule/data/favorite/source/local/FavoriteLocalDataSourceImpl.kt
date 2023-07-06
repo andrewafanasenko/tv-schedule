@@ -19,4 +19,11 @@ class FavoriteLocalDataSourceImpl @Inject constructor(
     override suspend fun removeFromFavorite(showId: Long) {
         favoriteShowsDao.deleteShow(showId)
     }
+
+    override suspend fun updateFavorite(show: ShowEntity) {
+        favoriteShowsDao.updateShow(show)
+    }
+
+    override suspend fun getShow(showId: Long): ShowEntity? = favoriteShowsDao.getShow(showId)
+
 }

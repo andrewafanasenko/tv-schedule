@@ -8,7 +8,7 @@ import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
 
 @Database(
     entities = [ShowEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(Converters::class)

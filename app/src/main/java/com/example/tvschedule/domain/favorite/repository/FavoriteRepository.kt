@@ -1,6 +1,6 @@
 package com.example.tvschedule.domain.favorite.repository
 
-import com.example.tvschedule.domain.search.model.Show
+import com.example.tvschedule.domain.show_details.model.Show
 import kotlinx.coroutines.flow.Flow
 
 
@@ -11,4 +11,8 @@ interface FavoriteRepository {
     suspend fun addToFavorite(show: Show)
 
     suspend fun removeFromFavorite(showId: Long)
+
+    suspend fun updateFavorite(show: Show)
+
+    suspend fun getFavoriteShow(showId: Long): Show?
 }

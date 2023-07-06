@@ -3,9 +3,11 @@ package com.example.tvschedule.di
 import com.example.tvschedule.data.favorite.repository.FavoriteRepositoryImpl
 import com.example.tvschedule.data.schedule.repository.ScheduleRepositoryImpl
 import com.example.tvschedule.data.search.repository.SearchRepositoryImpl
+import com.example.tvschedule.data.show_details.repository.ShowDetailsRepositoryImpl
 import com.example.tvschedule.domain.favorite.repository.FavoriteRepository
 import com.example.tvschedule.domain.schedule.repository.ScheduleRepository
 import com.example.tvschedule.domain.search.repository.SearchRepository
+import com.example.tvschedule.domain.show_details.repository.ShowDetailsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,8 +33,14 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun provideFavoriteRepository(
-        searchRepository: FavoriteRepositoryImpl
+        favoriteRepository: FavoriteRepositoryImpl
     ): FavoriteRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideShowDetailsRepository(
+        showDetailsRepository: ShowDetailsRepositoryImpl
+    ): ShowDetailsRepository
 
 }
 

@@ -22,22 +22,27 @@ import com.example.tvschedule.presentation.ui.theme.TVScheduleTheme
 @Composable
 fun MainContent(navController: NavHostController = rememberNavController()) {
     Scaffold(
-        bottomBar = {
-            NavigationBar {
-                val items = listOf(
-                    NavigationItem.Home,
-                    NavigationItem.Search,
-                    NavigationItem.Favorite
-                )
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                items.forEach { item ->
-                    NavBarItem(item, currentDestination, navController)
-                }
-            }
-        }
+        bottomBar = { BottomNavigation(navController) }
     ) { innerPadding ->
         MainNavHost(navController, innerPadding)
+    }
+}
+
+@Composable
+private fun BottomNavigation(navController: NavHostController) {
+    val items = listOf(
+        NavigationItem.Home,
+        NavigationItem.Search,
+        NavigationItem.Favorite
+    )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    if (items.any { it.route == currentDestination?.route }) {
+        NavigationBar {
+            items.forEach { item ->
+                NavBarItem(item, currentDestination, navController)
+            }
+        }
     }
 }
 
