@@ -8,6 +8,7 @@ data class ShowDetailsUiState(
     val isError: Boolean = false,
     val coverUrl: String = "",
     val showName: String = "",
+    val genres: List<String> = emptyList(),
     val summary: String = "",
     val isFavorite: Boolean = false,
     val cast: List<CastItem> = emptyList(),
