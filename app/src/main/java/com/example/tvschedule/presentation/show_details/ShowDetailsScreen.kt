@@ -4,7 +4,10 @@ import android.text.Html
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -91,6 +95,7 @@ private fun ShowDetailsList(state: ShowDetailsUiState) {
     ) {
         item { Cover(state.coverUrl) }
         stickyHeader { Name(state.showName) }
+        item { Genres(state.genres) }
         item { Summary(state.summary) }
         cast(state.cast, state.isViewAllCastButtonVisible)
         seasons(state.seasons, state.isViewAllSeasonsButtonVisible)
@@ -156,6 +161,32 @@ private fun Name(name: String) {
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
     )
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Genres(genres: List<String>) {
+    if (genres.isEmpty()) return
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        genres.forEach { genre ->
+            ElevatedAssistChip(
+                modifier = Modifier.padding(4.dp),
+                onClick = { /* Ignored */ },
+                shape = RoundedCornerShape(16.dp),
+                label = {
+                    Text(
+                        text = genre,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+            )
+        }
+    }
 }
 
 @Composable

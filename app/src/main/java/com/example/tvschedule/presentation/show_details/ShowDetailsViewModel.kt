@@ -42,6 +42,7 @@ class ShowDetailsViewModel @Inject constructor(
             isError = data.isError,
             coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
             showName = data.show?.showName.orEmpty(),
+            genres = data.show?.genres.orEmpty(),
             summary = data.show?.summary.orEmpty(),
             isFavorite = data.isFavorite,
             cast = data.cast.take(MAX_ITEMS_COUNT).map { person ->
