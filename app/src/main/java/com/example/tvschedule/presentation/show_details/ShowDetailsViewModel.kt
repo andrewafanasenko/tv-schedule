@@ -41,6 +41,7 @@ class ShowDetailsViewModel @Inject constructor(
             isLoading = data.isLoading,
             isError = data.isError,
             coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
+            rating = data.show?.rating,
             showName = data.show?.showName.orEmpty(),
             genres = data.show?.genres.orEmpty(),
             summary = data.show?.summary.orEmpty(),

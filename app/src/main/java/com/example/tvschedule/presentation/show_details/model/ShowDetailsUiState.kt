@@ -7,6 +7,7 @@ data class ShowDetailsUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val coverUrl: String = "",
+    val rating: Double? = null,
     val showName: String = "",
     val genres: List<String> = emptyList(),
     val summary: String = "",

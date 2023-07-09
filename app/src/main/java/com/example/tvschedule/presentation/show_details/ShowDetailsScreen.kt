@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -56,6 +57,7 @@ import com.example.tvschedule.presentation.ui.components.ImageCard
 import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
 import com.example.tvschedule.presentation.ui.components.ItemCast
 import com.example.tvschedule.presentation.ui.components.ItemSeason
+import com.example.tvschedule.presentation.ui.components.RatingPill
 
 
 @Composable
@@ -93,7 +95,7 @@ private fun ShowDetailsList(state: ShowDetailsUiState) {
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        item { Cover(state.coverUrl) }
+        item { Cover(state.coverUrl, state.rating) }
         stickyHeader { Name(state.showName) }
         item { Genres(state.genres) }
         item { Summary(state.summary) }
@@ -103,7 +105,7 @@ private fun ShowDetailsList(state: ShowDetailsUiState) {
 }
 
 @Composable
-private fun Cover(coverUrl: String) {
+private fun Cover(coverUrl: String, rating: Double?) {
     Box(contentAlignment = Alignment.TopCenter) {
         val backgroundColor = MaterialTheme.colorScheme.background
         ImageWithPlaceholder(
@@ -145,6 +147,15 @@ private fun Cover(coverUrl: String) {
                     .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.Fit
             )
+            rating?.let {
+                RatingPill(
+                    rating = it,
+                    modifier = Modifier
+                        .padding(top = 366.dp)
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp))
+                        .align(Alignment.TopCenter)
+                )
+            }
         }
     }
 }
