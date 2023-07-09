@@ -2,7 +2,9 @@ package com.example.tvschedule.presentation.show_details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.tvschedule.domain.favorite.use_case.AddToFavoritesUseCase
 import com.example.tvschedule.domain.favorite.use_case.GetFavoritesUseCase
+import com.example.tvschedule.domain.favorite.use_case.RemoveFromFavoritesUseCase
 import com.example.tvschedule.domain.show_details.use_case.GetShowDetailsUseCase
 import com.example.tvschedule.presentation.common.BaseViewModel
 import com.example.tvschedule.presentation.common.getPersonLifeRange
@@ -30,6 +32,8 @@ class ShowDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getShowDetailsUseCase: GetShowDetailsUseCase,
     private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val addToFavoritesUseCase: AddToFavoritesUseCase,
+    private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase
 ) : BaseViewModel<ShowDetailsUiEvent, ShowDetailsUiState>() {
 
     private val showId = checkNotNull(savedStateHandle[Screen.SHOW_ID]) as Long
@@ -79,7 +83,22 @@ class ShowDetailsViewModel @Inject constructor(
     }
 
     override fun handleEvent(event: ShowDetailsUiEvent) {
+        when (event) {
+            ShowDetailsUiEvent.OnFavoriteClick -> {
+                addRemoveFromFavorite()
+            }
+        }
+    }
 
+    private fun addRemoveFromFavorite() {
+        val show = showDetailsData.value.show ?: return
+        viewModelScope.launch {
+            if (showDetailsData.value.isFavorite) {
+                removeFromFavoritesUseCase.invoke(showId)
+            } else {
+                addToFavoritesUseCase.invoke(show)
+            }
+        }
     }
 
     private fun listenToFavoriteShows() {
@@ -87,9 +106,11 @@ class ShowDetailsViewModel @Inject constructor(
             getFavoritesUseCase.invoke()
                 .onSuccess { favoritesFlow ->
                     favoritesFlow.collect { shows ->
-                        shows.firstOrNull { it.id == showId }?.let { show ->
-                            showDetailsData.update {
-                                it.copy(show = show, isFavorite = true)
+                        showDetailsData.update { data ->
+                            shows.firstOrNull { it.id == showId }?.let { show ->
+                                data.copy(show = show, isFavorite = true)
+                            } ?: run {
+                                data.copy(isFavorite = false)
                             }
                         }
                     }
