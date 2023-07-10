@@ -50,7 +50,7 @@ class ShowDetailsViewModel @Inject constructor(
             genres = data.show?.genres.orEmpty(),
             summary = data.show?.summary.orEmpty(),
             isFavorite = data.isFavorite,
-            cast = data.cast.take(MAX_ITEMS_COUNT).map { person ->
+            cast = data.cast.take(data.limitCast).map { person ->
                 CastItem(
                     id = person.id,
                     fullName = person.fullName,
@@ -62,8 +62,8 @@ class ShowDetailsViewModel @Inject constructor(
                     imageUrl = person.imageUrl
                 )
             },
-            isViewAllCastButtonVisible = data.cast.size > MAX_ITEMS_COUNT,
-            seasons = data.seasons.take(MAX_ITEMS_COUNT).map { season ->
+            isViewAllCastButtonVisible = data.isViewAllCastButtonVisible,
+            seasons = data.seasons.take(data.limitSeasons).map { season ->
                 SeasonItem(
                     id = season.id,
                     name = season.name.ifBlank { season.number.toString() },
@@ -73,7 +73,7 @@ class ShowDetailsViewModel @Inject constructor(
                     imageUrl = season.imageUrl
                 )
             },
-            isViewAllSeasonsButtonVisible = data.seasons.size > MAX_ITEMS_COUNT
+            isViewAllSeasonsButtonVisible = data.isViewAllSeasonsButtonVisible
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())
 
@@ -87,6 +87,14 @@ class ShowDetailsViewModel @Inject constructor(
             ShowDetailsUiEvent.OnFavoriteClick -> {
                 addRemoveFromFavorite()
             }
+
+            ShowDetailsUiEvent.OnShowAllCastClick -> {
+                showAllCast()
+            }
+
+            ShowDetailsUiEvent.OnShowAllSeasonsClick -> {
+                showAllSeasons()
+            }
         }
     }
 
@@ -99,6 +107,14 @@ class ShowDetailsViewModel @Inject constructor(
                 addToFavoritesUseCase.invoke(show)
             }
         }
+    }
+
+    private fun showAllCast() {
+        showDetailsData.update { it.copy(isAllCastVisible = true) }
+    }
+
+    private fun showAllSeasons() {
+        showDetailsData.update { it.copy(isAllSeasonsVisible = true) }
     }
 
     private fun listenToFavoriteShows() {
@@ -138,10 +154,5 @@ class ShowDetailsViewModel @Inject constructor(
                     }
                 }
         }
-    }
-
-    companion object {
-
-        private const val MAX_ITEMS_COUNT = 4
     }
 }

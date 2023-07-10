@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -99,10 +100,11 @@ private fun ShowDetailsContent(
                     }
                 )
             }
-        }
+        },
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            ShowDetailsList(state)
+            ShowDetailsList(state, onEvent)
             TopBar {
                 navigation.invoke(ShowDetailsNavCallback.Back)
             }
@@ -112,7 +114,10 @@ private fun ShowDetailsContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShowDetailsList(state: ShowDetailsUiState) {
+private fun ShowDetailsList(
+    state: ShowDetailsUiState,
+    onEvent: (ShowDetailsUiEvent) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 16.dp)
@@ -121,8 +126,12 @@ private fun ShowDetailsList(state: ShowDetailsUiState) {
         stickyHeader { Name(state.showName) }
         item { Genres(state.genres) }
         item { Summary(state.summary) }
-        cast(state.cast, state.isViewAllCastButtonVisible)
-        seasons(state.seasons, state.isViewAllSeasonsButtonVisible)
+        cast(state.cast, state.isViewAllCastButtonVisible) {
+            onEvent.invoke(ShowDetailsUiEvent.OnShowAllCastClick)
+        }
+        seasons(state.seasons, state.isViewAllSeasonsButtonVisible) {
+            onEvent.invoke(ShowDetailsUiEvent.OnShowAllSeasonsClick)
+        }
     }
 }
 
@@ -173,7 +182,7 @@ private fun Cover(coverUrl: String, rating: Double?) {
                 RatingPill(
                     rating = it,
                     modifier = Modifier
-                        .padding(top = 366.dp)
+                        .padding(top = 384.dp)
                         .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp))
                         .align(Alignment.TopCenter)
                 )
@@ -232,33 +241,29 @@ private fun Summary(summary: String) {
     )
 }
 
-private fun LazyListScope.cast(cast: List<CastItem>, isViewAllVisible: Boolean) {
+private fun LazyListScope.cast(
+    cast: List<CastItem>,
+    isViewAllVisible: Boolean,
+    onViewAllClick: () -> Unit
+) {
     if (cast.isEmpty()) return
-    item {
-        SectionHeader(stringResource(id = R.string.cast_title))
-    }
+    item { SectionHeader(stringResource(id = R.string.cast_title)) }
     items(cast) { ItemCast(it) }
     if (isViewAllVisible) {
-        item {
-            ButtonViewAll {
-                // TODO
-            }
-        }
+        item { ButtonViewAll(onViewAllClick) }
     }
 }
 
-private fun LazyListScope.seasons(seasons: List<SeasonItem>, isViewAllVisible: Boolean) {
+private fun LazyListScope.seasons(
+    seasons: List<SeasonItem>,
+    isViewAllVisible: Boolean,
+    onViewAllClick: () -> Unit
+) {
     if (seasons.isEmpty()) return
-    item {
-        SectionHeader(stringResource(id = R.string.seasons_title))
-    }
+    item { SectionHeader(stringResource(id = R.string.seasons_title)) }
     items(seasons) { ItemSeason(it) }
     if (isViewAllVisible) {
-        item {
-            ButtonViewAll {
-                // TODO
-            }
-        }
+        item { ButtonViewAll(onViewAllClick) }
     }
 }
 
