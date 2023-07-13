@@ -1,10 +1,12 @@
 package com.example.tvschedule.data.util
 
 import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
+import com.example.tvschedule.domain.schedule.model.Schedule
 import com.example.tvschedule.domain.show_details.model.Cast
 import com.example.tvschedule.domain.show_details.model.Season
 import com.example.tvschedule.domain.show_details.model.Show
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 object ModelUtil {
 
@@ -96,5 +98,28 @@ object ModelUtil {
         genres = showGenres,
         cast = emptyList(),
         seasons = emptyList()
+    )
+
+    const val scheduleId = 235235L
+    const val scheduleEpisodeName = "Episode name"
+    const val scheduleSummary = "Schedule summary"
+    const val scheduleCoverUrl = "https://image_schedule.png"
+    const val scheduleSeasonNumber = 2
+    const val scheduleEpisodeNumber = 3
+    const val scheduleRuntime = 30
+    val scheduleAirDateTime = LocalDateTime.of(2024, 5, 5, 5, 30)
+    const val scheduleRating = 8.8
+
+    val schedule = Schedule(
+        id = scheduleId,
+        episodeName = scheduleEpisodeName,
+        summary = scheduleSummary,
+        coverUrl = scheduleCoverUrl,
+        seasonNumber = scheduleSeasonNumber,
+        episodeNumber = scheduleEpisodeNumber,
+        runtime = scheduleRuntime,
+        airDateTime = scheduleAirDateTime,
+        rating = scheduleRating,
+        show = show
     )
 }
