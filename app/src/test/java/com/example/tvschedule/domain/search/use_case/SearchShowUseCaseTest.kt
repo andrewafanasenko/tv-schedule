@@ -6,7 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -14,7 +14,7 @@ import org.mockito.kotlin.whenever
 
 class SearchShowUseCaseTest {
 
-    private val searchRepository = Mockito.mock<SearchRepository>()
+    private val searchRepository = mock<SearchRepository>()
 
     private val getScheduleUseCase = SearchShowUseCase(
         searchRepository = searchRepository,
