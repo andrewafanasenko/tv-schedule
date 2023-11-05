@@ -15,12 +15,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.example.tvschedule.presentation.search.model.ShowItem
+import kotlinx.collections.immutable.ImmutableList
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ShowsList(
-    shows: List<ShowItem>,
+    shows: ImmutableList<ShowItem>,
     listState: LazyListState,
     onFavouriteClick: (id: Long, isFavorite: Boolean) -> Unit,
     onItemClick: (showId: Long) -> Unit

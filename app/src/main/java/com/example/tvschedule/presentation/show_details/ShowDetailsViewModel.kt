@@ -16,6 +16,7 @@ import com.example.tvschedule.presentation.show_details.model.ShowDetailsData
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiEvent
 import com.example.tvschedule.presentation.show_details.model.ShowDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,7 +48,7 @@ class ShowDetailsViewModel @Inject constructor(
             coverUrl = data.show?.originalCoverUrl?.ifBlank { data.show.coverUrl }.orEmpty(),
             rating = data.show?.rating,
             showName = data.show?.showName.orEmpty(),
-            genres = data.show?.genres.orEmpty(),
+            genres = data.show?.genres.orEmpty().toImmutableList(),
             summary = data.show?.summary.orEmpty(),
             isFavorite = data.isFavorite,
             cast = data.cast.take(data.limitCast).map { person ->
@@ -61,7 +62,7 @@ class ShowDetailsViewModel @Inject constructor(
                     ),
                     imageUrl = person.imageUrl
                 )
-            },
+            }.toImmutableList(),
             isViewAllCastButtonVisible = data.isViewAllCastButtonVisible,
             seasons = data.seasons.take(data.limitSeasons).map { season ->
                 SeasonItem(
@@ -72,7 +73,7 @@ class ShowDetailsViewModel @Inject constructor(
                     dateRange = season.premiereDate.getSeasonDateRange(season.endDate),
                     imageUrl = season.imageUrl
                 )
-            },
+            }.toImmutableList(),
             isViewAllSeasonsButtonVisible = data.isViewAllSeasonsButtonVisible
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ShowDetailsUiState())

@@ -1,6 +1,8 @@
 package com.example.tvschedule.presentation.show_details.model
 
 import com.example.tvschedule.presentation.common.ViewState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 
 data class ShowDetailsUiState(
@@ -9,11 +11,11 @@ data class ShowDetailsUiState(
     val coverUrl: String = "",
     val rating: Double? = null,
     val showName: String = "",
-    val genres: List<String> = emptyList(),
+    val genres: ImmutableList<String> = persistentListOf(),
     val summary: String = "",
     val isFavorite: Boolean = false,
-    val cast: List<CastItem> = emptyList(),
+    val cast: ImmutableList<CastItem> = persistentListOf(),
     val isViewAllCastButtonVisible: Boolean = false,
-    val seasons: List<SeasonItem> = emptyList(),
+    val seasons: ImmutableList<SeasonItem> = persistentListOf(),
     val isViewAllSeasonsButtonVisible: Boolean = false,
 ) : ViewState

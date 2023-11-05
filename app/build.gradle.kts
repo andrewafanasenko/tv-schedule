@@ -95,6 +95,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
     implementation("com.github.andrewafanasenko:jcalendar:1.0.8")
 
     implementation("com.airbnb.android:lottie-compose:6.0.1")

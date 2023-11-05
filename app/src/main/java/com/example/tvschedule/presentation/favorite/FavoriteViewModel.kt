@@ -9,6 +9,7 @@ import com.example.tvschedule.presentation.favorite.model.FavoriteUiEvent
 import com.example.tvschedule.presentation.favorite.model.FavoriteUiState
 import com.example.tvschedule.presentation.search.model.ShowItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -44,7 +45,7 @@ class FavoriteViewModel @Inject constructor(
                     genres = show.genres,
                     isFavourite = true
                 )
-            }
+            }.toImmutableList()
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, FavoriteUiState())
 

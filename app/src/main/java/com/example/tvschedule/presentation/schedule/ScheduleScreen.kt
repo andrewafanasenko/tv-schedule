@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +37,7 @@ import com.jcalendar.library.JCalendar
 import com.jcalendar.library.model.CalendarMode
 import com.jcalendar.library.model.Day
 import com.jcalendar.library.rememberJCalendarState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -60,6 +63,7 @@ private fun ScheduleContent(
     onEvent: (ScheduleUiEvent) -> Unit,
     onShowClick: (showId: Long) -> Unit
 ) {
+    val listState = rememberLazyListState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +77,11 @@ private fun ScheduleContent(
             state.isLoading -> LoadingState()
             state.isError -> ErrorState { onEvent.invoke(ScheduleUiEvent.Retry) }
             state.schedule.isEmpty() -> EmptyState()
-            else -> Schedule(schedule = state.schedule, onShowClick = onShowClick)
+            else -> Schedule(
+                schedule = state.schedule,
+                listState = listState,
+                onShowClick = onShowClick
+            )
         }
     }
 }
@@ -153,8 +161,13 @@ private fun WeekCalendar(
 }
 
 @Composable
-private fun Schedule(schedule: List<ScheduleItem>, onShowClick: (showId: Long) -> Unit) {
+private fun Schedule(
+    schedule: ImmutableList<ScheduleItem>,
+    listState: LazyListState,
+    onShowClick: (showId: Long) -> Unit
+) {
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
