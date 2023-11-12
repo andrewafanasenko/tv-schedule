@@ -62,6 +62,7 @@ import com.example.tvschedule.presentation.ui.components.ImageWithPlaceholder
 import com.example.tvschedule.presentation.ui.components.ItemCast
 import com.example.tvschedule.presentation.ui.components.ItemSeason
 import com.example.tvschedule.presentation.ui.components.RatingPill
+import kotlinx.collections.immutable.ImmutableList
 
 
 @Composable
@@ -207,7 +208,7 @@ private fun Name(name: String) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Genres(genres: List<String>) {
+private fun Genres(genres: ImmutableList<String>) {
     if (genres.isEmpty()) return
     FlowRow(
         modifier = Modifier
@@ -242,7 +243,7 @@ private fun Summary(summary: String) {
 }
 
 private fun LazyListScope.cast(
-    cast: List<CastItem>,
+    cast: ImmutableList<CastItem>,
     isViewAllVisible: Boolean,
     onViewAllClick: () -> Unit
 ) {
@@ -255,7 +256,7 @@ private fun LazyListScope.cast(
 }
 
 private fun LazyListScope.seasons(
-    seasons: List<SeasonItem>,
+    seasons: ImmutableList<SeasonItem>,
     isViewAllVisible: Boolean,
     onViewAllClick: () -> Unit
 ) {

@@ -11,6 +11,7 @@ import com.example.tvschedule.presentation.search.model.SearchUiEvent
 import com.example.tvschedule.presentation.search.model.SearchUiState
 import com.example.tvschedule.presentation.search.model.ShowItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,7 @@ class SearchViewModel @Inject constructor(
                     genres = show.genres,
                     isFavourite = data.favoriteShowsIds.any { show.id == it }
                 )
-            }
+            }.toImmutableList()
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, SearchUiState())
 

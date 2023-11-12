@@ -8,6 +8,7 @@ import com.example.tvschedule.presentation.schedule.model.ScheduleItem
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiEvent
 import com.example.tvschedule.presentation.schedule.model.ScheduleUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -51,7 +52,7 @@ class ScheduleViewModel @Inject constructor(
                     season = schedule.seasonNumber,
                     episode = schedule.episodeNumber
                 )
-            }
+            }.toImmutableList()
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, ScheduleUiState())
 
