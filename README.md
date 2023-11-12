@@ -1,6 +1,6 @@
 # tv-schedule
 ## Simple showcase Android application
-#### The release APK could be found here: [tv-schedule](apks/tv-schedule.apk)
+#### The release APK could be found here: [tv-schedule](apks)
 ### Main information
 * Architecture: Clean + MVI
 * UI: [JetpackCompose](https://developer.android.com/jetpack/compose)
