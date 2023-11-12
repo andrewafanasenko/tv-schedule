@@ -4,7 +4,7 @@ import com.example.tvschedule.presentation.common.ViewEvent
 
 
 sealed interface ShowDetailsUiEvent : ViewEvent {
-    object OnFavoriteClick : ShowDetailsUiEvent
-    object OnShowAllCastClick : ShowDetailsUiEvent
-    object OnShowAllSeasonsClick : ShowDetailsUiEvent
+    data object OnFavoriteClick : ShowDetailsUiEvent
+    data object OnShowAllCastClick : ShowDetailsUiEvent
+    data object OnShowAllSeasonsClick : ShowDetailsUiEvent
 }
