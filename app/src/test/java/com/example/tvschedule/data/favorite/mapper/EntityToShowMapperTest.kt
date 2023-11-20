@@ -5,7 +5,7 @@ import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 
 
-class EntityToShowMapperTest {
+internal class EntityToShowMapperTest {
 
     private val entityToShowMapper = EntityToShowMapper()
 
