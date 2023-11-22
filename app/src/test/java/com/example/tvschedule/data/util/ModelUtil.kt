@@ -225,7 +225,7 @@ object ModelUtil {
     const val scheduleRuntime = 30
     val scheduleAirDateTime = LocalDateTime.of(2024, 5, 5, 5, 30)
     const val scheduleRating = 8.8
-    const val scheduleAirStamp = "2024-05-05T02:30:00+00:00"
+    const val scheduleAirStamp = "2024-05-05T05:30:00+03:00"
 
     val imageResponseSchedule = ImageResponse(
         medium = scheduleCoverUrl,
@@ -253,6 +253,8 @@ object ModelUtil {
         show = showResponse
     )
 
+    val schedulesResponse = listOf(scheduleResponse, scheduleResponse.copy(id = 433))
+
     val schedule = Schedule(
         id = scheduleId,
         episodeName = scheduleEpisodeName,
@@ -265,4 +267,8 @@ object ModelUtil {
         rating = scheduleRating,
         show = show
     )
+
+    val schedules = listOf(schedule, schedule.copy(id = 433))
+
+    val scheduleDate = LocalDate.of(2023, 11, 12)
 }
