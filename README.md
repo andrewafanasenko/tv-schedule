@@ -9,6 +9,7 @@
 * HTTP client: [Retrofit2](https://square.github.io/retrofit/)
 * DB: [Room](https://developer.android.com/training/data-storage/room)
 * Data serialization: [Kotlin serialization](https://github.com/Kotlin/kotlinx.serialization)
+* CI/CD: [GitHub actions](https://github.com/features/actions)
 * Calendar: [JCalendar](https://github.com/andrewafanasenko/JCalendar) (own implementation)
 * Animations: [Lottie](https://github.com/airbnb/lottie/blob/master/android-compose.md)
 * Image loading: [Coil](https://coil-kt.github.io/coil/compose/)
