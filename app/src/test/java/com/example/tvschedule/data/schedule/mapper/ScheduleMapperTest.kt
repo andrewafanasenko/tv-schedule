@@ -10,9 +10,9 @@ class ScheduleMapperTest {
 
     private val scheduleMapperTest = ScheduleMapper(ShowMapper())
 
-//    @Test
-//    fun `response to domain model returns valid model`() {
-//        assertThat(scheduleMapperTest.map(ModelUtil.scheduleResponse))
-//            .isEqualTo(ModelUtil.schedule)
-//    }
+    @Test
+    fun `response to domain model returns valid model`() {
+        assertThat(scheduleMapperTest.map(ModelUtil.scheduleResponse))
+            .isEqualTo(ModelUtil.schedule)
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.tvschedule.data.util
 
+import com.example.tvschedule.data.common.toLocalDateTime
 import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
 import com.example.tvschedule.data.schedule.api.model.ImageResponse
 import com.example.tvschedule.data.schedule.api.model.RatingResponse
@@ -16,7 +17,6 @@ import com.example.tvschedule.domain.show_details.model.Cast
 import com.example.tvschedule.domain.show_details.model.Season
 import com.example.tvschedule.domain.show_details.model.Show
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 object ModelUtil {
 
@@ -223,9 +223,8 @@ object ModelUtil {
     const val scheduleSeasonNumber = 2
     const val scheduleEpisodeNumber = 3
     const val scheduleRuntime = 30
-    val scheduleAirDateTime = LocalDateTime.of(2024, 5, 5, 5, 30)
     const val scheduleRating = 8.8
-    const val scheduleAirStamp = "2024-05-05T05:30:00+03:00"
+    const val scheduleAirStamp = "2024-05-05T05:30:00"
 
     val imageResponseSchedule = ImageResponse(
         medium = scheduleCoverUrl,
@@ -263,7 +262,7 @@ object ModelUtil {
         seasonNumber = scheduleSeasonNumber,
         episodeNumber = scheduleEpisodeNumber,
         runtime = scheduleRuntime,
-        airDateTime = scheduleAirDateTime,
+        airDateTime = scheduleAirStamp.toLocalDateTime(),
         rating = scheduleRating,
         show = show
     )
