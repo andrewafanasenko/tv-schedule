@@ -79,5 +79,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: tv-schedule.apk
-          path: apks/tv-schedule.apk
+          name: tv-schedule1.apk
+          path: apks/
