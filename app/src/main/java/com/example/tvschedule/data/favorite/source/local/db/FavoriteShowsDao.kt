@@ -16,7 +16,7 @@ interface FavoriteShowsDao {
     suspend fun addShow(show: ShowEntity)
 
     @Query("DELETE FROM show WHERE show.id is :showId")
-    suspend fun deleteShow(showId: Long): Int
+    suspend fun deleteShow(showId: Long)
 
     @Update
     suspend fun updateShow(show: ShowEntity)

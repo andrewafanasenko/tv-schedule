@@ -52,4 +52,40 @@ class ScheduleRepositoryTest {
             assertThat(e).isEqualTo(exception)
         }
     }
+
+    @Test
+    fun `get schedule and return local if exist success`() = runTest {
+        whenever(localDataSource.schedules)
+            .thenReturn(hashMapOf(ModelUtil.scheduleDate to ModelUtil.schedulesResponse))
+        whenever(mapper.mapList(ModelUtil.schedulesResponse)).thenReturn(ModelUtil.schedules)
+        val result = scheduleRepository.getSchedule(ModelUtil.scheduleDate)
+        verify(localDataSource, Mockito.times(1)).schedules
+        verify(remoteDataSource, Mockito.times(0))
+            .getSchedule(ModelUtil.scheduleDate)
+        verify(mapper, Mockito.times(1)).mapList(ModelUtil.schedulesResponse)
+        assertThat(result).isEqualTo(ModelUtil.schedules)
+    }
+
+    @Test
+    fun `get show from local success`() = runTest {
+        whenever(localDataSource.schedules)
+            .thenReturn(hashMapOf(ModelUtil.scheduleDate to ModelUtil.schedulesResponse))
+        whenever(showMapper.map(ModelUtil.showResponse)).thenReturn(ModelUtil.show)
+        val result = scheduleRepository.getShowFromCache(ModelUtil.showId)
+        verify(localDataSource, Mockito.times(1)).schedules
+        verify(showMapper, Mockito.times(1)).map(ModelUtil.showResponse)
+        assertThat(result).isEqualTo(ModelUtil.show)
+    }
+
+    @Test
+    fun `get show from local failed`() = runTest {
+        val exception = IllegalStateException("Failed to get show from local")
+        whenever(localDataSource.schedules).thenThrow(exception)
+        runCatching {
+            scheduleRepository.getShowFromCache(ModelUtil.showId)
+        }.onFailure { e ->
+            verify(localDataSource, Mockito.times(1)).schedules
+            assertThat(e).isEqualTo(exception)
+        }
+    }
 }
