@@ -5,6 +5,7 @@ import com.example.tvschedule.data.favorite.source.local.db.model.ShowEntity
 import com.example.tvschedule.data.schedule.api.model.ImageResponse
 import com.example.tvschedule.data.schedule.api.model.RatingResponse
 import com.example.tvschedule.data.schedule.api.model.ScheduleResponse
+import com.example.tvschedule.data.search.api.model.ShowSearchResponse
 import com.example.tvschedule.data.show_details.api.model.CastResponse
 import com.example.tvschedule.data.show_details.api.model.CharacterResponse
 import com.example.tvschedule.data.show_details.api.model.CountryResponse
@@ -270,4 +271,21 @@ object ModelUtil {
     val schedules = listOf(schedule, schedule.copy(id = 433))
 
     val scheduleDate = LocalDate.of(2023, 11, 12)
+
+    val showSearchResponse = ShowSearchResponse(
+        score = 9.0,
+        show = showResponse
+    )
+
+    val showsSearchResponse = listOf(
+        showSearchResponse,
+        showSearchResponse.copy(
+            score = 8.1,
+            show = showResponse.copy(id = 12312)
+        )
+    )
+    val shows = listOf(
+        show,
+        show.copy(id = 12312)
+    )
 }
