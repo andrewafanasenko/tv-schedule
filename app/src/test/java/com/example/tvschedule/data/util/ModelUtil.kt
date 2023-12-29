@@ -17,6 +17,7 @@ import com.example.tvschedule.domain.schedule.model.Schedule
 import com.example.tvschedule.domain.show_details.model.Cast
 import com.example.tvschedule.domain.show_details.model.Season
 import com.example.tvschedule.domain.show_details.model.Show
+import com.example.tvschedule.domain.show_details.model.ShowDetails
 import java.time.LocalDate
 
 object ModelUtil {
@@ -204,6 +205,11 @@ object ModelUtil {
         genres = showGenres,
         cast = casts,
         seasons = seasons
+    )
+
+    val showDetails = ShowDetails(
+        show = show,
+        isFavorite = true
     )
 
     val showFromEntity = Show(
