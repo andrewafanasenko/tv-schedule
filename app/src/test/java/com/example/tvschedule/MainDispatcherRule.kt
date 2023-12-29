@@ -9,15 +9,15 @@ import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
-class MainDispatcherRule @OptIn(ExperimentalCoroutinesApi::class) constructor(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+@OptIn(ExperimentalCoroutinesApi::class)
+class MainDispatcherRule constructor(
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) : TestWatcher() {
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     override fun starting(description: Description) {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun finished(description: Description) {
         Dispatchers.resetMain()
     }

@@ -17,6 +17,7 @@ import com.example.tvschedule.domain.schedule.model.Schedule
 import com.example.tvschedule.domain.show_details.model.Cast
 import com.example.tvschedule.domain.show_details.model.Season
 import com.example.tvschedule.domain.show_details.model.Show
+import com.example.tvschedule.domain.show_details.model.ShowDetails
 import java.time.LocalDate
 
 object ModelUtil {
@@ -29,6 +30,8 @@ object ModelUtil {
     const val showRating = 8.7
     const val showAverageRuntime = 30
     val showGenres = listOf("Comedy", "Drama", "Thriller")
+
+    const val searchQuery = "query"
 
     const val castId = 43L
     const val castFullName = "John Gold"
@@ -202,6 +205,11 @@ object ModelUtil {
         genres = showGenres,
         cast = casts,
         seasons = seasons
+    )
+
+    val showDetails = ShowDetails(
+        show = show,
+        isFavorite = true
     )
 
     val showFromEntity = Show(
