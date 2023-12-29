@@ -30,6 +30,8 @@ object ModelUtil {
     const val showAverageRuntime = 30
     val showGenres = listOf("Comedy", "Drama", "Thriller")
 
+    const val searchQuery = "query"
+
     const val castId = 43L
     const val castFullName = "John Gold"
     const val castCharacterName = "Peter"

@@ -59,7 +59,6 @@ class FavoriteViewModelTest {
         assertThat(state.shows).isEmpty()
     }
 
-
     @Test
     fun `remove from favorite shows success`() = runTest {
         val flow = flow { emit(listOf(ModelUtil.show)) }
@@ -105,7 +104,8 @@ class FavoriteViewModelTest {
             getFavoritesUseCase = getFavoritesUseCase,
             removeFromFavoritesUseCase = removeFromFavoritesUseCase
         )
-        whenever(viewModel.setEvent(FavoriteUiEvent.OnQueryChange("query"))).thenReturn(Unit)
+        whenever(viewModel.setEvent(FavoriteUiEvent.OnQueryChange(ModelUtil.searchQuery)))
+            .thenReturn(Unit)
         verify(getFavoritesUseCase, times(0)).invoke()
         val state = viewModel.viewState.value
         assertThat(state.isError).isFalse()
